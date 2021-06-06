@@ -7,8 +7,7 @@ from utils import unicodes
 # hence the last resort to custom implementation.
 
 validFuncs = set([
-                    'add',
-                    'edit',
+                    'puts',
                     'list',
                     'remove',
                     'buildfrom',
@@ -89,7 +88,8 @@ def parse(args: list) -> dict:
         _throwInvalid(5)
 
     if len(funcs) == 1 and len(paths) == 0:
-        _throwInvalid(6)
+        if funcs[0] != 'list':
+            _throwInvalid(6)
 
     if len(funcs) == 1 and diff_flag:
         _throwInvalid(7)

@@ -16,6 +16,8 @@ DEFAULT_CONFIG_PATH = '' # main dotfiles json $path
                          # '~/.dotfiles/*.json' or
                          # '~/.$user/novem.json'
 
+DEFAULT_ZIP_PATH = '' # main zip target used in 'buildfrom' argument
+
 def main():
     if len(argv) > 1:
         rgs = parse(argv[1:])

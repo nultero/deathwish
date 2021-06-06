@@ -11,16 +11,17 @@ def evalFuncs(args: dict):
 
     else:
         functions = {
-                'add': fn.add,
-                'edit': fn.edit,
+                'puts': fn.puts,
                 'list': fn.ls,
                 'remove': fn.remove,
                 'buildfrom': fn.buildfrom,
                 'unpack': fn.unpack
                 }   
 
+        _p = args['paths'][0] if args['funcs'][0] != 'list' else args['conf']
+
         functions[args['funcs'][0]](
-                                pth=args['paths'][0],
+                                pth=_p,
                                 verbosity=args['verb'],
                                 CONF=args['conf']
                                 )
@@ -28,23 +29,59 @@ def evalFuncs(args: dict):
 
 class fn():
 
-    def add(pth: str, verbosity: int, CONF: str):
+    def puts(pth: str, verbosity: int, CONF: str):
+    
         import json
         from datetime import datetime as dt
         from pathlib import Path
-        from os import stat
+        from os.path import getmtime
+
         with open(CONF, 'r') as f:
             out = json.load(f)
-        _path = Path(pth).absolute().resolve()
-        out[str(_path)] = f"{stat(_path).st_mtime}"
+
+        _p = Path(pth).absolute().resolve()
+        timestamp = f"{dt.fromtimestamp(getmtime(_p))}"
+
+        line = ""
+        if verbosity > 1:
+            line += f" ADDED new stamp for : '{_p}' \n\t timestamp : {timestamp}"
+        elif verbosity == 1:
+            line += f" ADDED : '{_p}'"
+        elif verbosity < 1:
+            line += f" ADDED : '{pth}'"
+
+        out[str(_p)] = timestamp
         with open(CONF, 'w') as f:
             json.dump(out, f)
+        print(line)
 
-    def edit():
-        ...
+    ###################
 
-    def ls():
-        ...
+    def ls(pth: str, verbosity: int, CONF: str):
+
+        import json
+
+        with open(CONF, 'r') as f:
+            cflist = json.load(f)
+
+        if verbosity < 1:
+            for cf in cflist:
+                print(cf.split('/')[-1])
+
+        elif verbosity == 1:
+            for cf, stamp in cflist.items():
+                print(f"{cf.split('/')[-1]}  |  {stamp.split(' ')[0]}")
+        
+        elif verbosity == 2:
+            for cf, stamp in cflist.items():
+                print(f"{cf.split('/')[-1]}  |  {stamp}")
+
+        elif verbosity == 3:
+            for cf, stamp in cflist.items():
+                print(f"{cf}  |  {stamp}")
+
+    ###################
+
 
     def remove():
         ...
