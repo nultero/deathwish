@@ -1,0 +1,30 @@
+
+# NOVEM . PY
+
+config opts:
+    DEFAULT_CONFIG_PATH  ->  where novem puts its data
+    DEFAULT_ZIP_PATH  ->  where to put ZIPPED dotfiles when BUILDFROM argument is called
+                        (unpack is the opposite of this)
+
+flags:
+    -v, -vv, -vvv          ->   level of verbosity
+    -h, --help     {arg}   ->   print help of function if there is an argument, or print all help
+    -d, --diff             ->   returns list of dots that have been changed
+
+
+
+$ novem     |  puts    |   {file path}   -> logs new dotfile
+            |          |   -d, --diff    -> updates all dotfiles that have been changed since last log
+            |
+            |
+            |  list    |   {optional search param}  -> prints all logged dotfiles
+            |          |   -d, --diff              -> not actually any different than diff flag by itself
+            |
+            |
+            |  remove  |   {file path, search}      -> cuts this dotfile from logs
+            |
+            |
+            |  zipto   |   {optional zip output path}   -> zips dotfiles to location if specified, uses config if not
+            |
+            |
+            |  unpack  |   {optional zip input path}    -> tries to unzip all dotfiles to their logged paths
