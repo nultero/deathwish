@@ -1,5 +1,5 @@
 
-# NOVEM . PY
+# NOVEM
 
 config opts:
     DEFAULT_CONFIG_PATH  ->  where novem puts its data
@@ -20,6 +20,7 @@ $ novem     |  puts    |   {file path}   -> logs new dotfile
             |  list    |   {optional search param}  -> prints all logged dotfiles
             |          |   -d, --diff              -> not actually any different than diff flag by itself
             |
+            |  tree    |   {file path}              ->  draws a tree of dotfiles in given path
             |
             |  remove  |   {file path, search}      -> cuts this dotfile from logs
             |
