@@ -8,9 +8,14 @@ config opts:
 
 flags:
     -v, -vv, -vvv          ->   level of verbosity
+    
     -h, --help     {arg}   ->   print help of function if there is an argument, or print all help
-    -d, --diff             ->   returns list of dots that have been changed
 
+    -d, --diff             ->   returns list of dots that have been changed
+          diff args  {days (default), months - "-d 3m" is diff from past 3 months}
+
+    -a, --all              ->   
+    -r, --recursive        ->   
 
 
 $ novem     |  puts    |   {file path}   -> logs new dotfile

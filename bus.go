@@ -1,19 +1,29 @@
 package main
 
-import "strings"
+import (
+	"strconv"
+	"strings"
+)
 
 type LogicBus struct {
+	ConfPath  string
 	Function  string
 	Verbosity int
 	Paths     []string
 	Help      bool
 	Diff      bool
-	ConfPath  string
+	DiffOpts  string
+	Recursive bool
 }
 
-func Increment(i string) string {
-	i += "v"
-	return i
+func IsAlphanumericArg(arg string) bool {
+	firstChar := string(arg[0])
+	_, err := strconv.Atoi(firstChar)
+	if err != nil {
+		return false
+	}
+
+	return true
 }
 
 func IsFlag(arg string) bool {
@@ -42,7 +52,7 @@ func GetFlagType(arg string) string {
 	if len(arg) > 1 {
 		return "multi"
 	} else if len(arg) == 0 {
-		Throw("emptyFlag")
+		ThrowError("emptyFlag")
 	}
 
 	return arg
@@ -54,8 +64,8 @@ func BreakMultiFlag(flag string) []string {
 	var flags []string
 
 	for i := range flag {
-		s := "-" + string(flag[i])
-		flags = append(flags, s)
+		s := "-" + string(flag[i]) //reappend dash for loop
+		flags = append(flags, s)   //to recognize them as flags
 	}
 
 	// plus a junk burner flag for the main() loop's pop

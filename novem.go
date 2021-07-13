@@ -1,9 +1,9 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
+	"strings"
 )
 
 const (
@@ -11,88 +11,64 @@ const (
 	PATH      = "~/.nultero/novem/"
 )
 
-// var helpFlag = flag.Bool("h, help", false, "prints out help")
-// var diffFlag = flag.Bool("d, diff", false, " prints out diff")
-// var verb = flag.Int("v", 0, "increases the verbosity of all output")
-
-// func init() {
-// 	flag.BoolVar(diffFlag, "d", false, "prints out diff")
-// 	flag.Func("v", "increases the verbosity of all output", func(v string) error {
-// 		*verb++
-// 		return nil
-// 	})
-// }
-
 func main() {
 
-	flag.Parse()
-
-	// bus := LogicBus{ //defined in Bus.go
-	// 	Function:  "",
-	// 	Verbosity: verb,
-	// 	Help:      helpFlag,
-	// 	Diff:      diffFlag,
-	// 	ConfPath:  PATH,
-	// }
-
-	ch := os.Args
-
-	for i := range ch {
-		fmt.Println(ch[i])
+	bus := LogicBus{ //defined in Bus.go
+		Function:  "",
+		Verbosity: 0,
+		Help:      false,
+		Diff:      false,
+		ConfPath:  PATH,
 	}
 
-	// flags := Reverse(flag.Args())
+	args := Reverse(os.Args[1:])
 
-	// for IsNotEmpty(flags) {
+	for IsNotEmpty(args) {
 
-	// 	thisFlag := flags[len(flags)-1]
+		thisArg := args[len(args)-1]
 
-	// 	if IsFlag(thisFlag) {
-	// 		switch GetFlagType(thisFlag) {
+		if IsFlag(thisArg) {
+			switch GetFlagType(thisArg) {
 
-	// 		// needs major cleanup
+			case "help":
+				bus.Help = true
 
-	// 		case "help":
-	// 			bus.Help = true
+			case "diff":
+				bus.Diff = true
 
-	// 		case "diff":
-	// 			bus.Diff = true
+			case "verb":
+				if bus.Verbosity < 3 {
+					bus.Verbosity++
+				} // ^ 3 is max verbosity anyway
 
-	// 		case "verb":
-	// 			bus.Verbosity++
+			case "multi":
+				args = BreakMultiFlag(thisArg)
 
-	// 		case "multi":
-	// 			flags = BreakMultiFlag(thisFlag)
-	// 			fmt.Println(flags)
+			default:
+				thisArg = strings.ReplaceAll(thisArg, "-", "")
+				ThrowDescriptiveError("unrecognizedFlag", thisArg)
+			}
 
-	// 		default:
-	// 			thisFlag = strings.ReplaceAll(thisFlag, "-", "")
-	// 			ThrowDescriptive("unrecognizedFlag", thisFlag)
-	// 		}
+		} else if IsFunc(thisArg) {
+			if IsEmpty(bus.Function) {
+				bus.Function = thisArg
+			} else {
+				ThrowError("multipleFunctionsErr")
+			}
+		} else if IsAlphanumericArg(thisArg) {
+			// placeholder
+			fmt.Println("Haven't gotten to figuring how to validate this yet")
+			// placeholder
+		}
 
-	// 	} else if IsFunc(thisFlag) {
-	// 		if IsEmpty(bus.Function) {
-	// 			bus.Function = thisFlag
-	// 		} else {
-	// 			Throw("multipleFunctionsErr")
-	// 		}
-	// 	}
+		args = PopLastElement(args)
 
-	// 	flags = PopLastElement(flags)
+	} /// end main argparse loop
 
-	// } /// end main argparse loop
+	if PassedFunction(bus.Function) {
+		fmt.Println(" PLUNK ")
+	}
 
-	// if PassedFunction(bus.Function) {
-	// 	fmt.Println(" PLUNK ")
-	// }
-
-	// if *helpFlag {
-	// 	fmt.Println(" halp")
-	// }
-
-	// if *diffFlag {
-	// 	fmt.Println(" diff")
-	// }
-	// fmt.Println(novemIcon + " yes")
-	// fmt.Println(bus)
+	fmt.Println(novemIcon + " yes")
+	fmt.Println(bus)
 }

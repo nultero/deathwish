@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func Throw(err string) {
+func ThrowError(err string) {
 
 	fmt.Print(novemIcon)
 
@@ -22,7 +22,7 @@ func Throw(err string) {
 	os.Exit(0)
 }
 
-func ThrowDescriptive(err string, desc string) {
+func ThrowDescriptiveError(err string, desc string) {
 	fmt.Print(novemIcon)
 
 	switch err {
