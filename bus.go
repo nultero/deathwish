@@ -34,6 +34,15 @@ func IsFlag(arg string) bool {
 	}
 }
 
+func GetArgType(arg string) string {
+	switch arg {
+	case "puts":
+		return "puts"
+	}
+
+	return "plop"
+}
+
 func GetFlagType(arg string) string {
 	arg = strings.ReplaceAll(arg, "-", "")
 
@@ -46,6 +55,9 @@ func GetFlagType(arg string) string {
 
 	case "d", "diff":
 		return "diff"
+
+	case "r":
+		return "recursive"
 
 	}
 
@@ -89,16 +101,19 @@ func IsEmpty(conf string) bool {
 	return false
 }
 
-func IsNotEmpty(args []string) bool {
-	if len(args) == 0 {
+func IsNotEmpty(args *[]string) bool {
+	if len(*args) == 0 {
 		return false
 	}
 
 	return true
 }
 
-func PopLastElement(flags []string) []string {
-	return flags[:len(flags)-1]
+func PopLastElement(args *[]string) []string {
+
+	*args = (*args)[:len(*args)-1]
+
+	return *args
 }
 
 func Reverse(flags []string) []string {
@@ -111,6 +126,6 @@ func Reverse(flags []string) []string {
 	return flags
 }
 
-func PassedFunction(fn string) bool {
-	return !IsEmpty(fn)
+func PassedFunction(fn *string) bool {
+	return !IsEmpty(*fn)
 }
