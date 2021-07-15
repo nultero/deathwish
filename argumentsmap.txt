@@ -18,7 +18,7 @@ flags:
     -r, --recursive        ->   
 
 
-$ novem     |  puts    |   {file path}   -> logs new dotfile
+$ novem     |  puts    |   {file path(s)}   -> logs new dotfile
             |          |   -d, --diff    -> updates all dotfiles that have been changed since last log
             |
             |
