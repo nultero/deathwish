@@ -6,7 +6,6 @@ import (
 )
 
 func ThrowError(err string) {
-
 	fmt.Print(novemIcon)
 
 	switch err {

@@ -72,26 +72,26 @@ func main() {
 			// placeholder
 			fmt.Println("Haven't gotten to figuring how to validate this yet")
 			// placeholder
+		} else {
+			bus.Paths = append(bus.Paths, thisArg)
 		}
 
 		args = PopLastElement(&args)
 
 	} /// end main argparse loop
 
-	if bus.Help { // higher priority than other stuff
+	if bus.Help { // help is higher priority than other stuff
 		if PassedFunction(&bus.Function) {
 			EvalHelp(bus.Function)
 		} else {
-			PrintHelp()
+			PrintAllHelp()
 		}
 
 	} else if PassedFunction(&bus.Function) {
-		fmt.Println(" PLUNK ")
+		EvalFuncs(&bus)
 
 	} else {
 		fmt.Println(novemIcon, "no args passed -> nothing doing")
 		fmt.Println(novemIcon, "run `novem -h` for a list of arguments")
 	}
-
-	fmt.Println("<<<<<", bus)
 }

@@ -67,7 +67,7 @@ func ZiptoHelp() {
 	BlankLine()
 }
 
-func PrintHelp() {
+func PrintAllHelp() {
 	PutsHelp()
 	LsHelp()
 	RemoveHelp()
