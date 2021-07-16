@@ -13,6 +13,8 @@ const (
 
 func main() {
 
+	CreateConfJsonIfNotExists()
+
 	bus := LogicBus{ //defined in Bus.go
 		ConfPath:  PATH,
 		Function:  "",
@@ -93,5 +95,23 @@ func main() {
 	} else {
 		fmt.Println(novemIcon, "no args passed -> nothing doing")
 		fmt.Println(novemIcon, "run `novem -h` for a list of arguments")
+	}
+}
+
+func CreateConfJsonIfNotExists() {
+	_, err := os.Stat(NovemJsonPath())
+	if err != nil {
+		fmt.Println(novemIcon, "the novem.json does not exist / been deleted")
+		fmt.Printf(">>> create new dotfiles log? [ Y / n ] ")
+
+		var in string
+		_, r := fmt.Scanln(&in)
+
+		if r != nil {
+			fmt.Println(r)
+			return
+		}
+
+		fmt.Println(novemIcon, in)
 	}
 }

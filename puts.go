@@ -12,7 +12,7 @@ func dumpPath(p chan string, newpath string) {
 func Puts(lb *LogicBus) {
 
 	paths := *&lb.Paths
-	valpaths := make([]string, len(paths))
+	validPaths := make([]string, len(paths))
 
 	for i := range paths {
 		f, err := os.Stat(paths[i])
@@ -21,14 +21,14 @@ func Puts(lb *LogicBus) {
 			fmt.Printf("%s '%s' file does not exist, skipping this path \n", novemIcon, paths[i])
 		} else {
 			fmt.Println(f.ModTime())
-			valpaths = append(valpaths, paths[i])
+			validPaths = append(validPaths, paths[i])
 		}
 	}
 
 	p := make(chan string)
 	tmp := []string{}
-	for i := range valpaths {
-		go dumpPath(p, valpaths[i])
+	for i := range validPaths {
+		go dumpPath(p, validPaths[i])
 		tmp = append(tmp, <-p)
 	}
 
