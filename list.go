@@ -10,16 +10,14 @@ func Ls(lb *LogicBus) {
 
 	if len(*&lb.Paths) == 0 { // no paths, lists the json
 
-		noveHome := NovemJsonPath()
-
-		jsonF, err := os.ReadFile(noveHome)
+		jsonF, err := os.ReadFile(NovemJsonPath())
 		if err != nil {
 			fmt.Println(err)
 		}
 
 		j, _ := json.Marshal(jsonF)
 
-		fmt.Println(j)
+		fmt.Println(string(j))
 
 	} else { // lists logged files in given PATHS
 		for i := range *&lb.Paths {

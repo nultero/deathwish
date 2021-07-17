@@ -28,7 +28,7 @@ func main() {
 
 	args := Reverse(os.Args[1:])
 
-	for IsNotEmpty(&args) {
+	for IsNotEmpty(args) {
 
 		thisArg := args[len(args)-1]
 
@@ -51,7 +51,7 @@ func main() {
 				} // ^ 3 is max verbosity anyway
 
 			case "multi":
-				args = PopLastElement(&args)
+				args = PopLastElement(args)
 				r := BreakMultiFlag(thisArg)
 				for i := range r {
 					args = append(args, r[i])
@@ -78,7 +78,7 @@ func main() {
 			bus.Paths = append(bus.Paths, thisArg)
 		}
 
-		args = PopLastElement(&args)
+		args = PopLastElement(args)
 
 	} /// end main argparse loop
 
@@ -102,16 +102,21 @@ func CreateConfJsonIfNotExists() {
 	_, err := os.Stat(NovemJsonPath())
 	if err != nil {
 		fmt.Println(novemIcon, "the novem.json does not exist / been deleted")
-		fmt.Printf(">>> create new dotfiles log? [ Y / n ] ")
+		fmt.Printf(">>> create new dotfiles log? [ Y / n ]  >")
 
-		var in string
+		in := ""
 		_, r := fmt.Scanln(&in)
 
 		if r != nil {
-			fmt.Println(r)
-			return
+			if r.Error() != "unexpected newline" {
+				fmt.Println(r)
+				return
+			}
 		}
 
-		fmt.Println(novemIcon, in)
+		if in != "n" {
+			fmt.Println(novemIcon, "creating the novem.json in ", PATH)
+			os.Create(NovemJsonPath())
+		}
 	}
 }

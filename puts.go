@@ -3,33 +3,60 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 )
-
-func dumpPath(p chan string, newpath string) {
-	p <- newpath
-}
 
 func Puts(lb *LogicBus) {
 
 	paths := *&lb.Paths
-	validPaths := make([]string, len(paths))
+	if len(paths) == 0 { //early return if no paths
+		fmt.Println(novemIcon, "no path args passed in to put into novem logs")
+		return
+	}
+
+	validPaths := []string{}
 
 	for i := range paths {
-		f, err := os.Stat(paths[i])
+		_, err := os.Stat(paths[i])
 		os.IsNotExist(err)
 		if err != nil {
-			fmt.Printf("%s '%s' file does not exist, skipping this path \n", novemIcon, paths[i])
+			s := "\033[31;1;4m" + paths[i] + "\033[0m"
+			fmt.Printf("%s '%s' file does not exist, skipping this path \n", novemIcon, s)
 		} else {
-			fmt.Println(f.ModTime())
+			// fmt.Println(f.ModTime())
 			validPaths = append(validPaths, paths[i])
 		}
 	}
 
-	p := make(chan string)
 	tmp := []string{}
-	for i := range validPaths {
-		go dumpPath(p, validPaths[i])
-		tmp = append(tmp, <-p)
+
+	validPaths = Reverse(validPaths)
+
+	for IsNotEmpty(validPaths) {
+
+		thisPath := validPaths[len(validPaths)-1]
+
+		f, _ := filepath.Abs(filepath.Join(thisPath))
+
+		inf, _ := os.Stat(f)
+		if inf.IsDir() {
+			if *&lb.Recursive {
+				fmt.Println("recurse works")
+
+			} else { // gotta clean up these ansis
+				s := "\033[36;1;4m" + thisPath + "\033[0m"
+				fmt.Println("... skipping", s, ": is a dir (no recursive flag found)")
+			}
+
+		} else {
+			// plus := "\033[32m+\033[0m"
+			// s := "\033[;0;4m" + AnsiColorString(thisPath, 50, 150, 50) + "\033[0m"
+			// fmt.Println(plus, s)
+			fmt.Println(inf)
+			tmp = append(tmp, f)
+		}
+
+		validPaths = PopLastElement(validPaths)
 	}
 
 	fmt.Println(tmp)

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
 func HandleTildePaths(pth string) string {
@@ -19,7 +20,6 @@ func HandleTildePaths(pth string) string {
 		pth = home + pth
 	}
 
-	fmt.Println(pth)
 	return pth
 }
 
@@ -27,4 +27,13 @@ func NovemJsonPath() string {
 	return HandleTildePaths(
 		PATH + "novem.json",
 	)
+}
+
+func AnsiColorString(s string, r, g, b int) string {
+	a := make([]string, 3)
+	n := []int{r, g, b}
+	for i := range n {
+		a[i] = strconv.Itoa(n[i])
+	}
+	return fmt.Sprintf("\033[38;2;%s;%s;%sm%s\033[0m", a[0], a[1], a[2], s)
 }

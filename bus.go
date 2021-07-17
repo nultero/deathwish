@@ -101,29 +101,29 @@ func IsEmpty(conf string) bool {
 	return false
 }
 
-func IsNotEmpty(args *[]string) bool {
-	if len(*args) == 0 {
+func IsNotEmpty(args []string) bool {
+	if len(args) == 0 {
 		return false
 	}
 
 	return true
 }
 
-func PopLastElement(args *[]string) []string {
+func PopLastElement(args []string) []string {
 
-	*args = (*args)[:len(*args)-1]
+	args = args[:len(args)-1]
 
-	return *args
+	return args
 }
 
-func Reverse(flags []string) []string {
+func Reverse(s []string) []string {
 
 	// this was a macro in a plugin
-	for i, j := 0, len(flags)-1; i < j; i, j = i+1, j-1 {
-		flags[i], flags[j] = flags[j], flags[i]
+	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+		s[i], s[j] = s[j], s[i]
 	}
 
-	return flags
+	return s
 }
 
 func PassedFunction(fn *string) bool {
