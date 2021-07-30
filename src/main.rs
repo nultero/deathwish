@@ -12,20 +12,22 @@ fn main() {
 
     } else { // args were passed
 
-        let mut rgs = args[1..].to_owned();
+        let rgs = args[1..].to_owned();
 
-        let mut bus = bus::LogicBus {
-            conf_path: String::from(""),
+        let mut bus = bus::LogicBus {// defaults
+            conf_path:      String::from(""),
+            function:       String::from(""),
+            verbosity:      0,
+            paths:          vec![],
+            help:           false,
+            diff:           false,
+            diff_opts:      String::from(""),
+            recursive:      false
+        };
 
-        }
+        bus = args::parse_args(rgs, bus);
 
-        while !args::is_empty(&rgs) {
-            let cur = &rgs[0];
-            println!("{} ", cur);
-            &rgs.remove(0);
-        }
-
-        println!("{:?}", rgs)
+        println!("{:?}", bus.conf_path);
     }
 
 
