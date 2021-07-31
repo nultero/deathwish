@@ -8,9 +8,9 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() == 1 {
-        prints::no_args_finger();
+        prints::no_args_finger(); // do nothing on no args
 
-    } else { // args were passed
+    } else {
 
         let rgs = args[1..].to_owned();
 
