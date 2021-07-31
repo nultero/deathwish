@@ -1,6 +1,8 @@
 use crate::bus::LogicBus;
 use crate::prints;
 
+use std::path::Path;
+
 pub fn is_empty(args: &Vec<String>) -> bool {
 	return args.len() == 0;
 }
@@ -14,39 +16,49 @@ const VALID_FUNCS: [&str; 6] = [
 	"zipto"
 ];
 
-pub fn is_func(r: &str) -> bool {
+
+fn is_func(r: &str) -> bool {
 	return VALID_FUNCS.contains(&r);
 }
 
-pub fn is_flag(r: &str) -> bool {
+fn is_flag(r: &str) -> bool {
 	return r.contains("-");
 }
 
-pub fn handle_verbose(v: &str, mut i: i8) -> i8 {
-
-	i += v.chars().filter(|c| c == &'v').count() as i8;
-
-	if i > 3 {
-		return 3;
-	} else {
-		return i;
+pub fn is_path(s: &str) -> bool {
+	let p = Path::new(s).canonicalize();
+	match p {
+		Ok(_r) => return true,
+		Err(_e) => return false
 	}
 }
 
-pub fn assign_flag(r: &str, mut bus: LogicBus) -> LogicBus {
+fn is_diff(r: &str, diff_flag: bool) -> bool {
 
-	let rg = &r.replace("-", "");
-
-	match rg.as_str() { // super clean match syntax, Rust can be pretty nice
-		"d" | "diff"		=> bus.diff = true,
-		"h" | "help" 		=> bus.help = true,
-		"r" | "recursive" 	=> bus.recursive = true,
-		"v" | "vv" | "vvv"	=> bus.verbosity = handle_verbose(rg, bus.verbosity),
-		_ 					=> prints::err_flag(r)
+	if r.len() != 2 {  
+		return false;  
 	}
 
-	return bus;
+	let ch: Vec<char> = r.chars().collect();
+	let n: char;
+
+	match &ch[0] {
+		'0'..='9' 	=> n = ch[1],
+		_ 			=> return false
+	}
+
+	let val_time_fmt = match n {
+		'd' | 'm'  	=> false,
+		_ 			=> true
+	};
+
+	if val_time_fmt && diff_flag {
+		prints::diff_err_flag(&String::from(n));
+	}
+
+	return true;
 }
+
 
 pub fn parse_args(mut args: Vec<String>, mut bus: LogicBus) -> LogicBus {
 
@@ -54,10 +66,12 @@ pub fn parse_args(mut args: Vec<String>, mut bus: LogicBus) -> LogicBus {
 
 		let cur = &args[0];
 		
-		match cur { //ngl, but this "_" match syntax looks ugly
-			_ if is_func(&cur) 		=> println!("yes"),
-			_ if is_flag(&cur) 		=> bus = assign_flag(&cur, bus),
-			_ 						=> prints::err_finger(&cur)
+		match cur { //ngl, but this "_" match syntax looks ugly, might be an antipattern
+			_ if is_func(&cur) 				=> bus.assign_func(&cur),
+			_ if is_flag(&cur) 				=> bus.assign_flag(&cur),
+			_ if is_path(&cur) 				=> bus.add_path(&cur),
+			_ if is_diff(&cur, bus.diff)	=> bus.add_diff_opt(&cur),
+			_ 								=> prints::err_finger(&cur)
 		}
 
 		&args.remove(0);
@@ -66,6 +80,11 @@ pub fn parse_args(mut args: Vec<String>, mut bus: LogicBus) -> LogicBus {
 	println!("bus verb: {}", bus.verbosity);
 	println!("bus recurs: {}", bus.recursive);
 	println!("bus diff: {}", bus.diff);
+	println!("bus diff opts: {}", bus.diff_opts);
+
+	for p in &bus.paths {
+		println!("'{}' is in bus.paths", p);
+	}
 
 	return bus;
 }
