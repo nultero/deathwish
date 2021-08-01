@@ -6,11 +6,11 @@ import (
 	"os"
 )
 
-func Ls(lb *LogicBus) {
+func Ls(lb *logicBus) {
 
 	if len(*&lb.Paths) == 0 { // no paths, lists the json
 
-		jsonF, err := os.ReadFile(NovemJsonPath())
+		jsonF, err := os.ReadFile(novemJson())
 		if err != nil {
 			fmt.Println(err)
 		}

@@ -6,30 +6,28 @@ import (
 	"strconv"
 )
 
-func HandleTildePaths(pth string) string {
+func expandTildePath(p string) string {
 
-	tilde := []byte("~")
+	tilde := []byte("~")[0]
 
-	if pth[0] == tilde[0] {
-		pth = pth[1:]
+	if p[0] == tilde {
+		p = p[1:]
 		home, err := os.UserHomeDir()
 		if err != nil {
 			fmt.Println(err)
 		}
 
-		pth = home + pth
+		p = home + p
 	}
 
-	return pth
+	return p
 }
 
-func NovemJsonPath() string {
-	return HandleTildePaths(
-		PATH + "novem.json",
-	)
+func novemJson() string {
+	return expandTildePath(PATH + "novem.json")
 }
 
-func AnsiColorString(s string, r, g, b int) string {
+func ansiColorString(s string, r, g, b int) string {
 	a := make([]string, 3)
 	n := []int{r, g, b}
 	for i := range n {

@@ -1,12 +1,11 @@
 package main
 
 import (
-	"strconv"
 	"strings"
 )
 
-type LogicBus struct {
-	ConfPath  string
+type logicBus struct {
+	DataFile  string
 	Function  string
 	Verbosity int
 	Paths     []string
@@ -16,25 +15,21 @@ type LogicBus struct {
 	Recursive bool
 }
 
-func IsAlphanumericArg(arg string) bool {
-	firstChar := string(arg[0])
-	_, err := strconv.Atoi(firstChar)
-	if err != nil {
-		return false
-	}
-
-	return true
-}
-
-func IsFlag(arg string) bool {
-	if strings.Contains(arg, "-") {
-		return true
-	} else {
-		return false
+// Builds an empty logic bus for filtering arguments (like paths or flags) into.
+func defaultBus() logicBus {
+	return logicBus{
+		DataFile:  PATH,
+		Function:  "",
+		Verbosity: 0,
+		Paths:     []string{},
+		Help:      false,
+		Diff:      false,
+		DiffOpts:  "",
+		Recursive: false,
 	}
 }
 
-func GetArgType(arg string) string {
+func getArgType(arg string) string {
 	switch arg {
 	case "puts":
 		return "puts"
@@ -43,34 +38,34 @@ func GetArgType(arg string) string {
 	return "plop"
 }
 
-func GetFlagType(arg string) string {
-	arg = strings.ReplaceAll(arg, "-", "")
+// func getFlagType(arg string) string {
+// 	arg = strings.ReplaceAll(arg, "-", "")
 
-	switch arg {
-	case "v":
-		return "verb"
+// 	switch arg {
+// 	case "v":
+// 		return "verb"
 
-	case "h", "help":
-		return "help"
+// 	case "h", "help":
+// 		return "help"
 
-	case "d", "diff":
-		return "diff"
+// 	case "d", "diff":
+// 		return "diff"
 
-	case "r":
-		return "recursive"
+// 	case "r":
+// 		return "recursive"
 
-	}
+// 	}
 
-	if len(arg) > 1 {
-		return "multi"
-	} else if len(arg) == 0 {
-		ThrowError("emptyFlag")
-	}
+// 	if len(arg) > 1 {
+// 		return "multi"
+// 	} else if len(arg) == 0 {
+// 		throwError("emptyFlag")
+// 	}
 
-	return arg
-}
+// 	return arg
+// }
 
-func BreakMultiFlag(flag string) []string {
+func breakMultiFlag(flag string) []string {
 	flag = strings.ReplaceAll(flag, "-", "")
 
 	var flags []string
@@ -84,48 +79,13 @@ func BreakMultiFlag(flag string) []string {
 	return append(flags, "#####")
 }
 
-func IsFunc(arg string) bool {
-	switch arg {
-	case "puts", "list", "tree", "remove", "zipto", "unpack":
-		return true
-	}
-
-	return false
-}
-
-func IsEmpty(conf string) bool {
-	if len(conf) == 0 {
-		return true
-	}
-
-	return false
-}
-
-func IsNotEmpty(args []string) bool {
-	if len(args) == 0 {
-		return false
-	}
-
-	return true
-}
-
-func PopLastElement(args []string) []string {
+func popLastElement(args []string) []string {
 
 	args = args[:len(args)-1]
 
 	return args
 }
 
-func Reverse(s []string) []string {
-
-	// this was a macro in a plugin
-	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
-		s[i], s[j] = s[j], s[i]
-	}
-
-	return s
-}
-
-func PassedFunction(fn *string) bool {
-	return !IsEmpty(*fn)
+func passedFunction(fn *string) bool {
+	return !isEmpty(*fn)
 }

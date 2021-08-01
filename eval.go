@@ -4,15 +4,15 @@ import (
 	"fmt"
 )
 
-func EvalFuncs(lb *LogicBus) {
+func evalFuncs(b *logicBus) {
 
-	switch *&lb.Function {
+	switch *&b.Function {
 
 	case "puts":
-		Puts(*&lb)
+		Puts(*&b)
 
 	case "list":
-		Ls(*&lb)
+		Ls(*&b)
 
 	default:
 		fmt.Println("yeet")

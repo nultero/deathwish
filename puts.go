@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func Puts(lb *LogicBus) {
+func Puts(lb *logicBus) {
 
 	paths := *&lb.Paths
 	if len(paths) == 0 { //early return if no paths
@@ -30,9 +30,7 @@ func Puts(lb *LogicBus) {
 
 	tmp := []string{}
 
-	validPaths = Reverse(validPaths)
-
-	for IsNotEmpty(validPaths) {
+	for !isEmpty(validPaths) {
 
 		thisPath := validPaths[len(validPaths)-1]
 
@@ -56,7 +54,7 @@ func Puts(lb *LogicBus) {
 			tmp = append(tmp, f)
 		}
 
-		validPaths = PopLastElement(validPaths)
+		validPaths = popLastElement(validPaths)
 	}
 
 	fmt.Println(tmp)
