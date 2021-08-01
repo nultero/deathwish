@@ -4,6 +4,7 @@ mod bus;
 mod prints;
 mod args;
 mod evals;
+mod nov;
 
 
 pub const CONFIG_PATH: &str = "~/.nultero/"; // main dotfiles json path

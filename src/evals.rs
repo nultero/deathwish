@@ -3,6 +3,7 @@ use dirs::home_dir;
 use crate::CONFIG_PATH;
 use crate::bus::LogicBus;
 use crate::prints::NOVEM_NINE;
+use crate::nov::{NovemDir, NovemFile};
 
 use std::path::Path;
 use std::fs;
@@ -58,11 +59,19 @@ fn read_conf(cf: &str)  {
 
     let s = fs::read_to_string(cf).unwrap();
     let j: serde_json::Value = serde_json::from_str(&s).unwrap();
-
+    let j = j.as_object().unwrap();
 
     // still need to iterate over the json
 
-    println!("{:?}", j);
+    let mut dots = NovemDir {
+        name: String::from(""),
+        files: vec!(),
+    };
+
+    for i in j {
+        dots.files.push()
+    }
+    // println!("{:?}", j);
 }
 
 fn nov_puts(_b: LogicBus, c: &str) {
