@@ -3,8 +3,8 @@ use crate::prints;
 
 use std::path::Path;
 
-pub fn is_empty(args: &Vec<String>) -> bool {
-	return args.len() == 0;
+fn is_empty(args: &Vec<String>) -> bool {  
+	return args.len() == 0;  
 }
 
 const VALID_FUNCS: [&str; 6] = [
@@ -39,21 +39,25 @@ fn is_diff(r: &str, diff_flag: bool) -> bool {
 		return false;  
 	}
 
-	let ch: Vec<char> = r.chars().collect();
-	let n: char;
+	let rg_chars: Vec<char> = r.chars().collect();
+	let sec_char: char;
 
-	match &ch[0] {
-		'0'..='9' 	=> n = ch[1],
+	match &rg_chars[0] {
+		'0'..='9' 	=> sec_char = rg_chars[1],
 		_ 			=> return false
 	}
 
-	let val_time_fmt = match n {
-		'd' | 'm'  	=> false,
-		_ 			=> true
+	let valid_time_fmt = match sec_char {
+		'd' | 'm'  	=> true,
+		_ 			=> false
 	};
 
-	if val_time_fmt && diff_flag {
-		prints::diff_err_flag(&String::from(n));
+	if !valid_time_fmt {
+		prints::diff_err_flag(&String::from(sec_char));
+	}
+	
+	if !diff_flag {
+		prints::fmt_before_diff_flag(&String::from(r));
 	}
 
 	return true;
@@ -77,6 +81,7 @@ pub fn parse_args(mut args: Vec<String>, mut bus: LogicBus) -> LogicBus {
 		&args.remove(0);
 	}
 
+	println!("bus func: {}", bus.function);
 	println!("bus verb: {}", bus.verbosity);
 	println!("bus recurs: {}", bus.recursive);
 	println!("bus diff: {}", bus.diff);

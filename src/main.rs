@@ -3,16 +3,23 @@ use std::env;
 mod bus;
 mod prints;
 mod args;
+mod evals;
+
+
+pub const CONFIG_PATH: &str = "~/.nultero/"; // main dotfiles json path
+
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() == 1 {
-        prints::no_args_finger(); // do nothing on no args
+        prints::no_args_finger(); // do nothing on no args -- not an error
 
     } else {
 
-        let rgs = args[1..].to_owned();
+        // finish out the flags' breakdown
+
+        let rgs = args[1..].to_vec();
 
         let mut bus = bus::LogicBus {// defaults
             conf_path:      String::from(""),
@@ -27,12 +34,6 @@ fn main() {
 
         bus = args::parse_args(rgs, bus);
 
-        println!("{:?}", bus.conf_path);
+        evals::eval(bus);
     }
-
-
-    // let b = bus::LogicBus {
-
-    // }
-
 }
