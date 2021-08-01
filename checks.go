@@ -24,22 +24,30 @@ func isEmpty(s interface{}) bool {
 	return false
 }
 
-func isAlphanumericArg(arg string) bool {
+func isDiffOpt(arg string) bool {
+
+	if len(arg) != 2 {
+		return false
+	}
+
 	firstChar := string(arg[0])
 	_, err := strconv.Atoi(firstChar)
 	if err != nil {
 		return false
 	}
 
-	return true
+	secChar := string(arg[1])
+	switch secChar {
+	case "d", "m":
+		return true
+
+	default:
+		return false
+	}
 }
 
 func isFlag(arg string) bool {
-	if strings.Contains(arg, "-") {
-		return true
-	} else {
-		return false
-	}
+	return strings.Contains(arg, "-")
 }
 
 func isFunc(arg string) bool {

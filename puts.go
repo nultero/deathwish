@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"novem/bus"
 	"os"
 	"path/filepath"
 )
 
-func Puts(lb *logicBus) {
+func Puts(lb *bus.Bus) {
 
 	paths := *&lb.Paths
 	if len(paths) == 0 { //early return if no paths
@@ -54,7 +55,7 @@ func Puts(lb *logicBus) {
 			tmp = append(tmp, f)
 		}
 
-		validPaths = popLastElement(validPaths)
+		// validPaths = popLastElement(validPaths)
 	}
 
 	fmt.Println(tmp)

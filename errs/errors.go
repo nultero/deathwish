@@ -28,6 +28,11 @@ func ThrowMultipleFuncsErr() {
 	quit()
 }
 
+func ThrowMultipleDiffOptsErr() {
+	fmt.Print(redError() + "multiple diff options passed")
+	quit()
+}
+
 func EmptyFlagErr() {
 	fmt.Print(redError() + "empty flag passed")
 	quit()
@@ -35,5 +40,10 @@ func EmptyFlagErr() {
 
 func UnrecognizedFlagErr(desc string) {
 	fmt.Print(redError() + "'" + desc + "' is an unrecognized flag")
+	quit()
+}
+
+func ProblemGettingWorkingDir() {
+	fmt.Println(redError() + "problem getting the current working dir")
 	quit()
 }

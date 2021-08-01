@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"novem/bus"
 )
 
-func evalFuncs(b *logicBus) {
+func evalFuncs(b *bus.Bus) {
 
 	switch *&b.Function {
 

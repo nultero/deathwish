@@ -2,9 +2,19 @@ package main
 
 import (
 	"fmt"
+	"novem/errs"
 	"os"
 	"strconv"
 )
+
+func cwd() string {
+	d, err := os.Getwd()
+	if err != nil {
+		errs.ProblemGettingWorkingDir()
+	}
+
+	return d
+}
 
 func expandTildePath(p string) string {
 

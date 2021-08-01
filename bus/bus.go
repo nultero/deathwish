@@ -1,10 +1,6 @@
-package main
+package bus
 
-import (
-	"strings"
-)
-
-type logicBus struct {
+type Bus struct {
 	DataFile  string
 	Function  string
 	Verbosity int
@@ -16,9 +12,9 @@ type logicBus struct {
 }
 
 // Builds an empty logic bus for filtering arguments (like paths or flags) into.
-func defaultBus() logicBus {
-	return logicBus{
-		DataFile:  PATH,
+func NewBus() Bus {
+	return Bus{
+		DataFile:  "",
 		Function:  "",
 		Verbosity: 0,
 		Paths:     []string{},
@@ -65,27 +61,13 @@ func getArgType(arg string) string {
 // 	return arg
 // }
 
-func breakMultiFlag(flag string) []string {
-	flag = strings.ReplaceAll(flag, "-", "")
+// func popLastElement(args []string) []string {
 
-	var flags []string
+// 	args = args[:len(args)-1]
 
-	for i := range flag {
-		s := "-" + string(flag[i]) //reappend dash for loop
-		flags = append(flags, s)   //to recognize them as flags
-	}
+// 	return args
+// }
 
-	// plus a junk burner flag for the main() loop's pop
-	return append(flags, "#####")
-}
-
-func popLastElement(args []string) []string {
-
-	args = args[:len(args)-1]
-
-	return args
-}
-
-func passedFunction(fn *string) bool {
-	return !isEmpty(*fn)
-}
+// func passedFunction(fn *string) bool {
+// 	return !isEmpty(*fn)
+// }

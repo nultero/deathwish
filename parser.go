@@ -2,14 +2,19 @@ package main
 
 import (
 	"fmt"
+	"novem/bus"
 	"novem/errs"
+	"strings"
 )
 
 func parseArgs(args []string) {
-	b := defaultBus()
 
-	for i := range args {
-		r := args[i]
+	b := bus.NewBus()
+	b.DataFile = novemJson()
+
+	for !isEmpty(args) {
+
+		r := args[0]
 
 		if isFunc(r) {
 			if isEmpty(b.Function) {
@@ -18,10 +23,61 @@ func parseArgs(args []string) {
 				errs.ThrowMultipleFuncsErr()
 			}
 
-		}
+		} else if isFlag(r) {
+			s := strings.ReplaceAll(r, "-", "")
+			if len(s) == 1 {
+				addFlag(s, &b)
+
+			} else if len(s) == 0 {
+				errs.EmptyFlagErr()
+
+			} else { //multiple flags, "vvh" = verb +2, & help
+				args = breakFlag(s, args)
+			}
+
+		} else if isDiffOpt(r) {
+			if isEmpty(b.DiffOpts) {
+				b.DiffOpts = r
+			} else {
+				errs.ThrowMultipleDiffOptsErr()
+			}
+
+		} //
+
+		args = args[1:]
 	}
 
 	fmt.Println(b)
+}
+
+func addFlag(flag string, b *bus.Bus) {
+	switch flag {
+	case "v":
+		*&b.Verbosity = max(*&b.Verbosity)
+
+	case "h":
+		*&b.Help = true
+
+	case "d":
+		*&b.Diff = true
+	}
+}
+
+func breakFlag(flag string, args []string) []string {
+	for i := range flag {
+		s := "-" + string(flag[i]) //reappend dash for loop
+		args = append(args, s)     //to recognize them as flags
+	}
+	// main loop will still chop off the 0th index multiflag in args slice
+	return args
+}
+
+func max(v int) int {
+	if v != 3 {
+		return v + 1
+	}
+
+	return 3
 }
 
 // for isNotEmpty(args) {

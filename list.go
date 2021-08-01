@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"novem/bus"
 	"os"
 )
 
-func Ls(lb *logicBus) {
+func Ls(lb *bus.Bus) {
 
 	if len(*&lb.Paths) == 0 { // no paths, lists the json
 
