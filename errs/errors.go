@@ -14,6 +14,11 @@ func NoArgs() {
 	fmt.Println(FINGER + "no args passed")
 }
 
+func NoFunctionErr() {
+	fmt.Println(FINGER + "no function passed")
+	quit()
+}
+
 func redError() string {
 	return "\033[31;1;4merror:\033[0m "
 }
@@ -40,6 +45,11 @@ func EmptyFlagErr() {
 
 func UnrecognizedFlagErr(desc string) {
 	fmt.Print(redError() + "'" + desc + "' is an unrecognized flag")
+	quit()
+}
+
+func UnrecognizedArgErr(desc string) {
+	fmt.Print(redError() + "'" + desc + "' is not a valid argument, flag, or filepath")
 	quit()
 }
 

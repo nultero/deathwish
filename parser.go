@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"novem/bus"
+	"novem/chks"
 	"novem/errs"
+	"path/filepath"
 	"strings"
 )
 
@@ -12,18 +14,18 @@ func parseArgs(args []string) {
 	b := bus.NewBus()
 	b.DataFile = novemJson()
 
-	for !isEmpty(args) {
+	for !chks.IsEmpty(args) {
 
 		r := args[0]
 
-		if isFunc(r) {
-			if isEmpty(b.Function) {
+		if chks.IsFunc(r) {
+			if chks.IsEmpty(b.Function) {
 				b.Function = r
 			} else {
 				errs.ThrowMultipleFuncsErr()
 			}
 
-		} else if isFlag(r) {
+		} else if chks.IsFlag(r) {
 			s := strings.ReplaceAll(r, "-", "")
 			if len(s) == 1 {
 				addFlag(s, &b)
@@ -35,19 +37,29 @@ func parseArgs(args []string) {
 				args = breakFlag(s, args)
 			}
 
-		} else if isDiffOpt(r) {
-			if isEmpty(b.DiffOpts) {
+		} else if chks.IsDiffOpt(r) {
+			if chks.IsEmpty(b.DiffOpts) {
 				b.DiffOpts = r
 			} else {
 				errs.ThrowMultipleDiffOptsErr()
 			}
 
-		} //
+		} else if chks.IsValidPath(r) {
+			p, _ := filepath.Abs(r)
+			b.Paths = append(b.Paths, p)
+
+		} else {
+			errs.UnrecognizedArgErr(r)
+		}
 
 		args = args[1:]
-	}
+	} // end args loop
 
-	fmt.Println(b)
+	if chks.IsEmpty(b.Function) {
+		errs.NoFunctionErr()
+	} else {
+		fmt.Println(b)
+	}
 }
 
 func addFlag(flag string, b *bus.Bus) {
@@ -57,6 +69,9 @@ func addFlag(flag string, b *bus.Bus) {
 
 	case "h":
 		*&b.Help = true
+
+	case "r":
+		*&b.Recursive = true
 
 	case "d":
 		*&b.Diff = true

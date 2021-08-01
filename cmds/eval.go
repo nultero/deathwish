@@ -1,11 +1,12 @@
-package main
+package cmds
 
 import (
-	"fmt"
 	"novem/bus"
 )
 
-func evalFuncs(b *bus.Bus) {
+const novemIcon = "\u277e >"
+
+func EvalFuncs(b *bus.Bus) {
 
 	switch *&b.Function {
 
@@ -15,7 +16,5 @@ func evalFuncs(b *bus.Bus) {
 	case "list":
 		Ls(*&b)
 
-	default:
-		fmt.Println("yeet")
 	}
 }

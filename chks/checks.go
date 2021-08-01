@@ -1,11 +1,13 @@
-package main
+package chks
 
 import (
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
 
-func isEmpty(s interface{}) bool {
+func IsEmpty(s interface{}) bool {
 
 	t, ok := s.(string)
 	if ok {
@@ -24,7 +26,7 @@ func isEmpty(s interface{}) bool {
 	return false
 }
 
-func isDiffOpt(arg string) bool {
+func IsDiffOpt(arg string) bool {
 
 	if len(arg) != 2 {
 		return false
@@ -46,15 +48,29 @@ func isDiffOpt(arg string) bool {
 	}
 }
 
-func isFlag(arg string) bool {
+func IsFlag(arg string) bool {
 	return strings.Contains(arg, "-")
 }
 
-func isFunc(arg string) bool {
+func IsFunc(arg string) bool {
 	switch arg {
 	case "puts", "list", "tree", "remove", "zipto", "unpack":
 		return true
 	}
 
 	return false
+}
+
+func IsValidPath(arg string) bool {
+	p, r := filepath.Abs(arg)
+	if r != nil {
+		return false
+	}
+
+	_, err := os.Stat(p)
+	if err != nil {
+		return false
+	}
+
+	return true
 }

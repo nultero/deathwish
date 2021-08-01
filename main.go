@@ -1,6 +1,7 @@
 package main
 
 import (
+	"novem/chks"
 	"novem/errs"
 	"os"
 )
@@ -14,7 +15,7 @@ func main() {
 
 	args := os.Args[1:]
 
-	if !isEmpty(args) {
+	if !chks.IsEmpty(args) {
 		parseArgs(args)
 
 	} else {

@@ -1,15 +1,16 @@
-package main
+package cmds
 
 import (
 	"fmt"
 	"novem/bus"
+	"novem/chks"
 	"os"
 	"path/filepath"
 )
 
-func Puts(lb *bus.Bus) {
+func Puts(b *bus.Bus) {
 
-	paths := *&lb.Paths
+	paths := *&b.Paths
 	if len(paths) == 0 { //early return if no paths
 		fmt.Println(novemIcon, "no path args passed in to put into novem logs")
 		return
@@ -31,7 +32,7 @@ func Puts(lb *bus.Bus) {
 
 	tmp := []string{}
 
-	for !isEmpty(validPaths) {
+	for !chks.IsEmpty(validPaths) {
 
 		thisPath := validPaths[len(validPaths)-1]
 
@@ -39,7 +40,7 @@ func Puts(lb *bus.Bus) {
 
 		inf, _ := os.Stat(f)
 		if inf.IsDir() {
-			if *&lb.Recursive {
+			if *&b.Recursive {
 				fmt.Println("recurse works")
 
 			} else { // gotta clean up these ansis

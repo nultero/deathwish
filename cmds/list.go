@@ -1,4 +1,4 @@
-package main
+package cmds
 
 import (
 	"encoding/json"
@@ -7,11 +7,11 @@ import (
 	"os"
 )
 
-func Ls(lb *bus.Bus) {
+func Ls(b *bus.Bus) {
 
-	if len(*&lb.Paths) == 0 { // no paths, lists the json
+	if len(*&b.Paths) == 0 { // no paths, lists the json
 
-		jsonF, err := os.ReadFile(novemJson())
+		jsonF, err := os.ReadFile(*&b.DataFile)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -21,8 +21,8 @@ func Ls(lb *bus.Bus) {
 		fmt.Println(string(j))
 
 	} else { // lists logged files in given PATHS
-		for i := range *&lb.Paths {
-			fmt.Println(*&lb.Paths[i])
+		for i := range *&b.Paths {
+			fmt.Println(*&b.Paths[i])
 		}
 	}
 }
