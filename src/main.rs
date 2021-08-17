@@ -7,7 +7,7 @@ mod evals;
 mod nov;
 
 
-pub const CONFIG_PATH: &str = "~/.nultero/"; // main dotfiles json path
+pub const CONFIG_PATH: &str = "~/.novem/"; // main dotfiles json path
 
 
 fn main() {
