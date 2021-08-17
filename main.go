@@ -1,5 +1,9 @@
 package main
 
+// chunko chickens
+// chicken sammiches
+// chumpkin pops
+
 import (
 	"novem/chks"
 	"novem/errs"

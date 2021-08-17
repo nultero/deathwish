@@ -1,10 +1,10 @@
 package cmds
 
 type dotfile struct {
-	name, timestamp string
+	Name, Timestamp string
 }
 
 type dir struct {
-	name string
-	dots []dotfile
+	Name string
+	Dots []dotfile
 }

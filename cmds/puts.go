@@ -11,30 +11,17 @@ import (
 func Puts(b *bus.Bus) {
 
 	paths := *&b.Paths
-	if len(paths) == 0 { //early return if no paths
-		fmt.Println(novemIcon, "no path args passed in to put into novem logs")
+
+	if chks.IsEmpty(paths) { //early return if no paths
+		fmt.Println(novemIcon, "no path args passed in to put into novem log")
 		return
-	}
-
-	validPaths := []string{}
-
-	for i := range paths {
-		_, err := os.Stat(paths[i])
-		os.IsNotExist(err)
-		if err != nil {
-			s := "\033[31;1;4m" + paths[i] + "\033[0m"
-			fmt.Printf("%s '%s' file does not exist, skipping this path \n", novemIcon, s)
-		} else {
-			// fmt.Println(f.ModTime())
-			validPaths = append(validPaths, paths[i])
-		}
 	}
 
 	tmp := []string{}
 
-	for !chks.IsEmpty(validPaths) {
+	for !chks.IsEmpty(paths) {
 
-		thisPath := validPaths[len(validPaths)-1]
+		thisPath := paths[0]
 
 		f, _ := filepath.Abs(filepath.Join(thisPath))
 
@@ -56,7 +43,7 @@ func Puts(b *bus.Bus) {
 			tmp = append(tmp, f)
 		}
 
-		// validPaths = popLastElement(validPaths)
+		paths = paths[1:]
 	}
 
 	fmt.Println(tmp)
