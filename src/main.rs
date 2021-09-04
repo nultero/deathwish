@@ -8,9 +8,11 @@ mod colors {
     pub mod prints;
 }
 mod cmds {
+    pub mod config;
     pub mod evals;
-    pub mod funcs;
-    pub mod nov;
+    pub mod utils;
+    pub mod puts;
+    pub mod nov_structs;
 }
 mod errs {
     pub mod errors;

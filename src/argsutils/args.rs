@@ -62,6 +62,7 @@ pub fn parse_args(mut args: Vec<String>) -> LogicBus {
         verbosity: 0,
         paths: vec![],
         help: false,
+        user_dir: String::from(""),
         diff: false,
         diff_opts: String::from(""),
         recursive: false,
@@ -80,10 +81,6 @@ pub fn parse_args(mut args: Vec<String>) -> LogicBus {
         }
 
         &args.remove(0);
-    }
-
-    for p in &b.paths {
-        println!("'{}' is in bus.paths", p);
     }
 
     return b;

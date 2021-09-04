@@ -8,6 +8,7 @@ pub struct LogicBus {
     pub verbosity: i8,
     pub paths: Vec<String>,
     pub help: bool,
+    pub user_dir: String,
     pub diff: bool,
     pub diff_opts: String,
     pub recursive: bool,
