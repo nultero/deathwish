@@ -1,19 +1,15 @@
 use crate::argsutils::bus::LogicBus;
-use crate::cmds::utils::get_user_dir;
 use crate::cmds::puts::puts;
+use crate::cmds::utils::get_user_dir;
 
-use crate::cmds::config::{
-    get_conf,
-    conf_exists,
-    confirm_conf,
-    create_conf
-};
+use crate::cmds::config::{conf_exists, confirm_conf, create_conf, get_conf};
 
 pub fn eval(mut b: LogicBus) {
     let c = get_conf();
 
     if conf_exists(&c) {
         b.user_dir = get_user_dir();
+        b.add_called();
 
         match b.function.as_str() {
             "puts" => puts(b, &c),
@@ -28,6 +24,3 @@ pub fn eval(mut b: LogicBus) {
         }
     }
 }
-
-
-

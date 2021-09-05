@@ -5,17 +5,13 @@ use std::process;
 
 use std::io::Error;
 
-#[allow(dead_code)]
 pub fn sys_err(e: Error) {
     println!("{} {}", RED_FINGER, &e);
     process::exit(1);
 }
 
 pub fn throw_err(err_description: &str) {
-    println!(
-        "{} {}",
-        RED_FINGER, err_description
-    );
+    println!("{} {}", RED_FINGER, err_description);
     process::exit(1);
 }
 

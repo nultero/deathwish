@@ -1,6 +1,5 @@
-
-use crate::errs::errors::sys_err;
 use crate::cmds::utils::get_user_dir;
+use crate::errs::errors::sys_err;
 
 use crate::prints::{blue, emph, NOVEM_NINE};
 use crate::CONFIG_PATH;
@@ -9,11 +8,8 @@ use std::fs;
 use std::io::*;
 use std::path::Path;
 
-
 extern crate chrono;
-use chrono::{Local};
-
-
+use chrono::Local;
 
 pub fn get_conf() -> String {
     let mut _home: String = String::default();
@@ -61,7 +57,6 @@ pub fn confirm_conf(conf_path: &str) -> bool {
 }
 
 pub fn create_conf(conf_path: &str) {
-
     // conf_path format:
     // `/home/$user/.novem/novem.txt`
 
@@ -83,7 +78,7 @@ pub fn create_conf(conf_path: &str) {
     let mut nv_str = String::from(&user_dir);
 
     let now = Local::now().to_rfc2822();
-    
+
     for i in 2..dir_str_spl.len() {
         let tabs = "\t".repeat(i - 1);
         let cur = &dir_str_spl[i];

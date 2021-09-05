@@ -62,6 +62,7 @@ pub fn parse_args(mut args: Vec<String>) -> LogicBus {
         verbosity: 0,
         paths: vec![],
         help: false,
+        called_from: String::from(""),
         user_dir: String::from(""),
         diff: false,
         diff_opts: String::from(""),

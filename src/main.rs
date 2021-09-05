@@ -10,9 +10,9 @@ mod colors {
 mod cmds {
     pub mod config;
     pub mod evals;
-    pub mod utils;
-    pub mod puts;
     pub mod nov_structs;
+    pub mod puts;
+    pub mod utils;
 }
 mod errs {
     pub mod errors;

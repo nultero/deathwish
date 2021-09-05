@@ -1,5 +1,6 @@
 use crate::errs::errors;
 
+use std::env::current_dir;
 use std::path::Path;
 
 pub struct LogicBus {
@@ -8,6 +9,7 @@ pub struct LogicBus {
     pub verbosity: i8,
     pub paths: Vec<String>,
     pub help: bool,
+    pub called_from: String,
     pub user_dir: String,
     pub diff: bool,
     pub diff_opts: String,
@@ -34,6 +36,11 @@ impl LogicBus {
 
     pub fn assign_func(&mut self, r: &str) {
         self.function = r.to_owned();
+    }
+
+    pub fn add_called(&mut self) {
+        let cd = current_dir().unwrap();
+        self.called_from = cd.to_str().unwrap().to_owned();
     }
 
     pub fn add_path(&mut self, s: &str) {
