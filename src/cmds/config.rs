@@ -73,9 +73,7 @@ pub fn create_conf(conf_path: &str) {
     }
 
     let dir_str_spl: Vec<&str> = conf_path.split("/").filter(|s| s.len() > 0).collect();
-
-    let user_dir = format!("{}{}", get_user_dir(), "\n");
-    let mut nv_str = String::from(&user_dir);
+    let mut nv_str = format!("{}\n", get_user_dir());
 
     let now = Local::now().to_rfc2822();
 

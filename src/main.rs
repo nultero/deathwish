@@ -10,6 +10,7 @@ mod colors {
 mod cmds {
     pub mod config;
     pub mod evals;
+    pub mod nov_funcs;
     pub mod nov_structs;
     pub mod puts;
     pub mod utils;
@@ -22,7 +23,7 @@ use argsutils::args;
 use cmds::evals;
 use colors::prints;
 
-pub const CONFIG_PATH: &str = "~/.novem/"; // main dotfiles json path
+pub const CONFIG_PATH: &str = "~/.novem/"; // main dotfiles path
 
 fn main() {
     let args: Vec<String> = env::args().collect();

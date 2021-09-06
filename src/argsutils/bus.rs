@@ -38,7 +38,7 @@ impl LogicBus {
         self.function = r.to_owned();
     }
 
-    pub fn add_called(&mut self) {
+    pub fn add_dir_called_from(&mut self) {
         let cd = current_dir().unwrap();
         self.called_from = cd.to_str().unwrap().to_owned();
     }
@@ -55,5 +55,20 @@ impl LogicBus {
         } else {
             errors::diff_exists_err();
         }
+    }
+
+    pub fn new() -> LogicBus {
+        return LogicBus {
+            conf_path: String::from(""),
+            function: String::from(""),
+            verbosity: 0,
+            paths: vec![],
+            help: false,
+            called_from: String::from(""),
+            user_dir: String::from(""),
+            diff: false,
+            diff_opts: String::from(""),
+            recursive: false,
+        };
     }
 }

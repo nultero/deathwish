@@ -9,7 +9,7 @@ pub fn eval(mut b: LogicBus) {
 
     if conf_exists(&c) {
         b.user_dir = get_user_dir();
-        b.add_called();
+        b.add_dir_called_from();
 
         match b.function.as_str() {
             "puts" => puts(b, &c),

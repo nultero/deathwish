@@ -55,19 +55,7 @@ fn is_diff(r: &str, diff_flag: bool) -> bool {
 }
 
 pub fn parse_args(mut args: Vec<String>) -> LogicBus {
-    let mut b = LogicBus {
-        // defaults
-        conf_path: String::from(""),
-        function: String::from(""),
-        verbosity: 0,
-        paths: vec![],
-        help: false,
-        called_from: String::from(""),
-        user_dir: String::from(""),
-        diff: false,
-        diff_opts: String::from(""),
-        recursive: false,
-    };
+    let mut b = LogicBus::new();
 
     while !is_empty(&args) {
         let cur = &args[0];
