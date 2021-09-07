@@ -1,5 +1,6 @@
 use crate::argsutils::bus::LogicBus;
 use crate::cmds::puts::puts;
+use crate::cmds::list::list;
 use crate::cmds::utils::get_user_dir;
 
 use crate::cmds::config::{conf_exists, confirm_conf, create_conf, get_conf};
@@ -13,7 +14,7 @@ pub fn eval(mut b: LogicBus) {
 
         match b.function.as_str() {
             "puts" => puts(b, &c),
-
+            "list" => list(b, &c),
             _ => println!("args should be validated, so this will never print"),
         }
     } else {

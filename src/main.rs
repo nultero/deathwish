@@ -10,6 +10,7 @@ mod colors {
 mod cmds {
     pub mod config;
     pub mod evals;
+    pub mod list;
     pub mod nov_funcs;
     pub mod nov_structs;
     pub mod puts;
