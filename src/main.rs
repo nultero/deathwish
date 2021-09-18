@@ -11,7 +11,7 @@ pub const CONFIG_PATH: &'static str = "~/.novem/"; // main dotfiles path
 fn main() {
     let args: Vec<String> = env::args().skip(1).collect();
 
-    if args.len() == 1 {
+    if args.len() == 0 {
         colors::prints::no_args_finger(); // do nothing on no args -- not an error
         
     } else {

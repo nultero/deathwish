@@ -8,18 +8,19 @@ use std::fs;
 extern crate chrono;
 use chrono::{DateTime, Local};
 
+// the idea for puts is to create a searchable tree
+// and break each of the incoming paths
+// into pieces digestible into the Novem tree struct
+// and eventually commit these to the novem file
+// the user dir is a weird exception in that I don't
+// want to commit the home/ separately
+
 pub fn puts(b: LogicBus, _c: &str) {
+    
     if b.paths.len() == 0 {
         println!("{} no filepaths passed to novem", NOVEM_NINE);
         return;
     }
-
-    // the idea for puts is to create a searchable tree
-    // and break each of the incoming paths
-    // into pieces digestible into the Novem tree struct
-    // and eventually commit these to the novem file
-    // the user dir is a weird exception in that I don't
-    // want to commit the home/ separately
 
     let nv = NovemDir::basic(b.user_dir.to_owned());
 
@@ -27,14 +28,11 @@ pub fn puts(b: LogicBus, _c: &str) {
         let f = fs::metadata(p.to_owned()).unwrap();
         if f.is_dir() {
             if b.recursive {
-                // _nv.name = f.to_owned();
                 println!("skipping the dir walk for now");
             } else {
-                println!(
-                    "{}",
-                    format!("skipping dir '{}' -- recurse flag not set", emph(&p))
-                );
+                println!("skipping dir '{}' -- recurse flag not set", emph(&p));
             }
+            
         } else if f.is_file() {
             let time = f.modified().unwrap();
             let time: DateTime<Local> = DateTime::from(time);

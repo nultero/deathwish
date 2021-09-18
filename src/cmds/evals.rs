@@ -17,9 +17,11 @@ pub fn eval(mut b: LogicBus) {
             "list" => list(b, &c),
             _ => println!("args should be validated, so this will never print"),
         }
+        
     } else {
         if confirm_conf(&c) {
             create_conf(&c);
+
         } else {
             println!("exiting")
         }

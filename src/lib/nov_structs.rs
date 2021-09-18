@@ -37,20 +37,20 @@ impl NovemDir {
         };
     }
 
-    #[allow(dead_code)]
-    fn add() {}
-
     pub fn digest(&self, mut path: String) {
         if path.starts_with("/") {
             path = path[1..].to_string();
         }
 
-        println!("{}", &path);
+        let path_chunks = break_root_path(path, &self.name);
+        
+        for i in path_chunks {
+            println!("{}", i);
+        }
     }
 }
 
-#[allow(dead_code)]
-fn break_root_path(mut path: String, user_dir: String) -> Vec<String> {
+fn break_root_path(mut path: String, user_dir: &str) -> Vec<String> {
     let mut tmp = "".to_owned();
     if path.contains(&user_dir) {
         path = path.replace(&user_dir, "");
