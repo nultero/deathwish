@@ -1,15 +1,14 @@
-use crate::argsutils::bus::LogicBus;
+use crate::lib::bus::LogicBus;
 // use crate::cmds::nov_funcs::*;
-use crate::cmds::nov_structs::NovemDir;
-use crate::colors::prints::NOVEM_NINE;
+use crate::lib::nov_structs::NovemDir;
 use crate::colors::prints::emph;
+use crate::colors::prints::NOVEM_NINE;
 use std::fs;
 
 extern crate chrono;
 use chrono::{DateTime, Local};
 
 pub fn puts(b: LogicBus, _c: &str) {
-
     if b.paths.len() == 0 {
         println!("{} no filepaths passed to novem", NOVEM_NINE);
         return;
@@ -30,11 +29,12 @@ pub fn puts(b: LogicBus, _c: &str) {
             if b.recursive {
                 // _nv.name = f.to_owned();
                 println!("skipping the dir walk for now");
-                
             } else {
-                println!("{}", format!("skipping dir '{}' -- recurse flag not set", emph(&p)));
+                println!(
+                    "{}",
+                    format!("skipping dir '{}' -- recurse flag not set", emph(&p))
+                );
             }
-
         } else if f.is_file() {
             let time = f.modified().unwrap();
             let time: DateTime<Local> = DateTime::from(time);

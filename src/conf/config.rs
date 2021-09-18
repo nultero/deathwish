@@ -1,7 +1,7 @@
-use crate::cmds::utils::get_user_dir;
+use crate::lib::pathing::get_user_dir;
 use crate::errs::errors::sys_err;
 
-use crate::prints::{blue, emph, NOVEM_NINE};
+use crate::colors::prints::{blue, emph, NOVEM_NINE};
 use crate::CONFIG_PATH;
 
 use std::fs;

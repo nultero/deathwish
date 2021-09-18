@@ -1,4 +1,4 @@
-use crate::cmds::nov_structs::NovemDir;
+use crate::lib::nov_structs::NovemDir;
 use crate::errs::errors;
 use std::fs;
 

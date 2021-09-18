@@ -1,4 +1,4 @@
-use crate::argsutils::bus::LogicBus;
+use crate::lib::bus::LogicBus;
 use crate::errs::errors;
 
 use std::path::Path;
