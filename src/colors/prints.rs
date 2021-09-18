@@ -3,6 +3,8 @@ pub const NOVEM_NINE: &str = "\x1b[32;1m\u{277e}\x1b[0m ";
 
 pub fn no_args_finger() {
     println!("{}  no args", RED_FINGER);
+
+
 }
 
 pub fn blue(s: &str) -> String {

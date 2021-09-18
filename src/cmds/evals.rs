@@ -1,9 +1,9 @@
-use crate::argsutils::bus::LogicBus;
-use crate::cmds::puts::puts;
+use crate::lib::bus::LogicBus;
 use crate::cmds::list::list;
-use crate::cmds::utils::get_user_dir;
+use crate::cmds::puts::puts;
+use crate::lib::pathing::get_user_dir;
 
-use crate::cmds::config::{conf_exists, confirm_conf, create_conf, get_conf};
+use crate::conf::config::{conf_exists, confirm_conf, create_conf, get_conf};
 
 pub fn eval(mut b: LogicBus) {
     let c = get_conf();
