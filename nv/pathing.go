@@ -1,7 +1,6 @@
 package nv
 
 import (
-	"fmt"
 	"novem/errs"
 	"os"
 	"path/filepath"
@@ -23,13 +22,16 @@ func ExpandTilde(path string) string {
 		path = path[1:]
 		p, err := filepath.Abs(path)
 
-		if err != nil { //\\\\\\
-			fmt.Println("exiting with error:", err)
-			os.Exit(1)
+		if err != nil {
+			errs.SysErr(err)
 		}
 
 		path = p
 	}
 
 	return path
+}
+
+func GetFullPath(path string) string {
+	return GetHomeDir() + ExpandTilde(path)
 }

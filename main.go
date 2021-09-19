@@ -10,6 +10,12 @@ const PATH = "~/.novem/"
 
 func main() {
 
+	//
+	//
+	//
+	//
+	//
+
 	args := os.Args[1:]
 
 	config, err := conf.Ok(PATH)
