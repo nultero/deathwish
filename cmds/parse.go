@@ -1,5 +1,5 @@
 package cmds
 
-func Parse(args []string, config string) {
+func Parse(config, path string, args []string) {
 
 }

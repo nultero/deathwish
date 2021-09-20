@@ -15,6 +15,8 @@ func Fix(path string) {
 
 	_, err := os.Stat(path)
 
+	path = nv.GetHomeDir() + nv.ExpandTilde(path)
+
 	if err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
 			novemDirNotExists(path)
@@ -34,8 +36,7 @@ func isValid(a string) bool {
 const prompt = "create new novem dir? "
 
 func novemDirNotExists(path string) {
-	dir := nv.GetHomeDir() + nv.ExpandTilde(path)
-	s := "'" + colors.Blue(dir) + "'"
+	s := "'" + colors.Blue(path) + "'"
 	fmt.Println("novem directory", s, "does not exist / was deleted \n ")
 
 	pr := colors.Emph("[ y / n ]")
@@ -50,7 +51,7 @@ func novemDirNotExists(path string) {
 	}
 
 	if strings.Contains(answer, "y") {
-		createConf(dir)
+		createConf(path)
 
 	} else {
 		fmt.Println(colors.NovemNine(), "> sure thing, pardner")
@@ -60,7 +61,7 @@ func novemDirNotExists(path string) {
 }
 
 func createConf(dir string) {
-	err := os.Mkdir(dir, 0644)
+	err := os.Mkdir(dir, 0755)
 
 	if err != nil {
 		errs.SysErr(err)
@@ -70,12 +71,22 @@ func createConf(dir string) {
 	fmt.Println("created", dir)
 }
 
-//
-//
-//
-//
-//
-
 func initNovemFile(path string) {
 
+	ft, err := os.Stat(path)
+	if err != nil {
+		errs.SysErr(err)
+	}
+
+	path = path + "/novem.txt"
+
+	now := nv.GetTimeStr(ft.ModTime())
+	b := []byte(path + nv.SEPARATOR + now)
+
+	r := os.WriteFile(path, b, 0755)
+	if r != nil {
+		errs.SysErr(r)
+	}
+
+	fmt.Println("wrote out", colors.DarkBlue(path), "as datafile")
 }

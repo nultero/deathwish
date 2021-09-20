@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-const rfc2822 = "Mon Jan 02 15:04:05 -0700 2006"
 const HOME = "$HOME"
+const SEPARATOR = "|||"
 
 type NovemNode struct {
 	PathChunks []string
@@ -29,13 +29,17 @@ type NovemDir struct {
 	Dirs     []NovemDir
 }
 
+func GetTimeStr(t time.Time) string {
+	return t.Format(time.RubyDate)
+}
+
 func (nd NovemDir) addFile(filepath string) {
 	mt, err := os.Stat(filepath)
 	if err != nil {
 		errs.SysErr(err)
 	}
 
-	t, r := time.Parse(rfc2822, mt.ModTime().String())
+	t, r := time.Parse(time.RFC1123, mt.ModTime().String())
 	if r != nil {
 		errs.SysErr(r)
 	}

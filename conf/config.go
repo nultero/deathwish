@@ -5,21 +5,21 @@ import (
 	"os"
 )
 
-func Ok(path string) (string, error) {
+func Ok(path string) (string, string, error) {
 
-	path = nv.ExpandTilde(path)
+	path = nv.GetFullPath(path)
 
 	_, err := os.Stat(path)
 
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
-	config, r := os.ReadFile(path)
+	config, r := os.ReadFile(path + "/novem.txt")
 
 	if r != nil {
-		return "", r
+		return "", "", r
 	}
 
-	return string(config), nil
+	return string(config), path, nil
 }

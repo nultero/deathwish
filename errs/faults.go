@@ -13,4 +13,6 @@ func quit() {
 func SysErr(r error) {
 	s := colors.Red("error:")
 	fmt.Println(s, r)
+	panic(r)
+	// quit()
 }
