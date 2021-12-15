@@ -1,22 +1,30 @@
 
 # NOVEM
 
+BLUF: Swap out dotfiles with sym or hardlinks, 
+      put dots in central place, trackable with git.
+      Make this super easy.
+
 config opts:
-    DEFAULT_CONFIG_PATH  ->  where novem puts its data
-    DEFAULT_ZIP_PATH  ->  where to put ZIPPED dotfiles when BUILDFROM argument is called
+    config / data dir     where novem puts its data
+    zip path?             where to put zipped dotfiles when ZIP argument is called
                         (unpack is the opposite of this)
+                        this might not matter too much with cloud stuff and autouplinks
+                        but still
 
 flags:
-    -v, -vv, -vvv          ->   level of verbosity
+    -v, -vv, -vvv             level of verbosity? i.e., datestamps
     
-    -h, --help     {arg}   ->   print help of function if there is an argument, or print all help
+    -h, --help     {arg}      print help of function if there is an argument, or print all help
 
-    -d, --diff             ->   returns list of dots that have been changed
+    -d, --diff                returns list of dots that have been changed
           diff args  {days (default), months - "-d 3m" is diff from past 3 months}
 
-    -a, --all              ->   
-    -r, --recursive        ->   
+    -a, --all                 ? is this useful?
+    -r, --recursive           ? replace with subdir?
 
+// search by file name or inode
+// file hashes ? when something has been moved
 
 $ novem     |  puts    |   {file path(s)}   -> logs new dotfile
             |          |   -d, --diff    -> updates all dotfiles that have been changed since last log
@@ -24,8 +32,6 @@ $ novem     |  puts    |   {file path(s)}   -> logs new dotfile
             |
             |  list    |   {optional search param}  -> prints all logged dotfiles
             |          |   -d, --diff              -> not actually any different than diff flag by itself
-            |
-            |  tree    |   {file path}              ->  draws a tree of dotfiles in given path
             |
             |  remove  |   {file path, search}      -> cuts this dotfile from logs
             |
