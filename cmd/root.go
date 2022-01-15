@@ -13,8 +13,8 @@ import (
 )
 
 // When called with no args, novem will stat the current
-// directory for any files it is tracking, without delving
-// into any subdirs(at least not without `-r` flag).
+// directory for any files it is tracking and compare against
+// its index, without delving into any subdirs(at least not without `-r` flag).
 var rootCmd = &cobra.Command{
 	Use:   "novem",
 	Short: "Dead simple wrapper for managing dotfiles. \n" + flavorText,
@@ -28,7 +28,7 @@ func statCwd(cmd *cobra.Command, args []string) {
 		tics.ThrowSys(statCwd, err)
 	}
 
-	names, nodes := fsys.StatDir(cwd, &SubDirFlag)
+	names, nodes := fsys.StatDir(cwd, &RecurseFlag)
 	idx := index.From(names, nodes)
 
 	fmt.Println(idx)
@@ -41,7 +41,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.Flags().BoolVarP(&SubDirFlag, "recursive", "r", false, "traverses subdirectories wherever novem was called")
+	rootCmd.Flags().BoolVarP(&RecurseFlag, "recursive", "r", false, "traverses subdirectories wherever novem was called")
 }
 
 func initConfig() {

@@ -1,6 +1,8 @@
 package main
 
-import "novem/cmd"
+import (
+	"novem/cmd"
+)
 
 func main() {
 	cmd.Execute()

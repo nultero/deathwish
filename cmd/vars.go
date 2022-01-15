@@ -1,19 +1,32 @@
 package cmd
 
-import "github.com/nultero/tics"
+import (
+	"novem/cmd/index"
 
-var NovNine = tics.MakeT("\u277e").Bold().Str()
-var flavorText = tics.Blue(" -> the ") + NovNine + tics.Blue(" th time I've needed this")
+	"github.com/nultero/tics"
+)
 
-var SubDirFlag bool
+var (
+	NovNine    = tics.Make("\u277e").Bold().String()
+	flavorText = tics.Make(" -> the ").Blue().String() +
+		NovNine +
+		tics.Make(" th time I've needed this").Blue().String()
 
-var confFile = "confFile"
-var dataDir = "dataDir"
+	RecurseFlag bool
+	Verbosity   int = 0
+
+	confFile = "confFile"
+	dataDir  = "dataDir"
+	idxFile  = "index file"
+)
 
 var confMap = map[string]string{
 	confFile: "$USER/.config/novem.yaml",
 	dataDir:  "$USER/novem",
+	idxFile:  index.IdxFile,
 }
 
 var defaultSettings = []string{ // TODO useful defaults around indexing, persists, sym v hardlinks?
+	dataDir + ": " + index.IdxFile,
+	idxFile + ": " + index.IdxFile,
 }
