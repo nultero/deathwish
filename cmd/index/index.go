@@ -11,6 +11,10 @@ import (
 // what the dots should look like. Accidental moves and deletions
 // should crop up here, and it should be a little bit faster than
 // trying to read a dir/dirs into memory.
+// Probably have to use hardlinks to be able to track certain
+// things like file moves, so this does inherently limit novem
+// to a single local machine. Could use git to distribute deltas
+// across machines.
 var IdxFile = "/.novem_index"
 
 type index map[string]interface{}

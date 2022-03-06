@@ -1,16 +1,19 @@
 package cmd
 
 import (
+	"fmt"
 	"novem/cmd/index"
 
 	"github.com/nultero/tics"
 )
 
 var (
-	NovNine    = tics.Make("\u277e").Bold().String()
-	flavorText = tics.Make(" -> the ").Blue().String() +
-		NovNine +
-		tics.Make(" th time I've needed this").Blue().String()
+	novNine    = tics.Make("\u277e").Bold().String()
+	flavorText = fmt.Sprintf("%v%v%v",
+		tics.Make(" -> the ").Blue().String(),
+		novNine,
+		tics.Make(" th time I've needed this").Blue().String(),
+	)
 
 	RecurseFlag bool
 	Verbosity   int = 0
@@ -27,6 +30,6 @@ var confMap = map[string]string{
 }
 
 var defaultSettings = []string{ // TODO useful defaults around indexing, persists, sym v hardlinks?
-	dataDir + ": " + index.IdxFile,
+	dataDir + ": " + confMap[dataDir],
 	idxFile + ": " + index.IdxFile,
 }

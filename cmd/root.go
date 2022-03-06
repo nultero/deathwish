@@ -2,9 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"novem/cmd/fsys"
-	"novem/cmd/index"
-	"os"
 
 	"github.com/nultero/tics"
 	"github.com/spf13/cobra"
@@ -19,19 +16,11 @@ var rootCmd = &cobra.Command{
 	Use:   "novem",
 	Short: "Dead simple wrapper for managing dotfiles. \n" + flavorText,
 	Args:  cobra.NoArgs,
-	Run:   statCwd,
+	Run:   getAnyFromIndex,
 }
 
-func statCwd(cmd *cobra.Command, args []string) {
-	cwd, err := os.Getwd()
-	if err != nil {
-		tics.ThrowSys(statCwd, err)
-	}
-
-	names, nodes := fsys.StatDir(cwd, &RecurseFlag)
-	idx := index.From(names, nodes)
-
-	fmt.Println(idx)
+func getAnyFromIndex(cmd *cobra.Command, args []string) {
+	fmt.Println("yup")
 }
 
 func Execute() {

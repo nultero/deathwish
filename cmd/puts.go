@@ -1,42 +1,36 @@
 package cmd
 
 import (
-	"fmt"
-	"novem/cmd/fsys"
-	"path/filepath"
+	"novem/cmd/argpkgs"
+	"novem/cmd/putsFn"
+	"os"
 
+	"github.com/nultero/tics"
 	"github.com/spf13/cobra"
 )
 
-// putsCmd represents the puts command
 var putsCmd = &cobra.Command{
-	Use:   "puts [FILES]",
-	Short: "A brief description of your command",
-	Args:  cobra.MinimumNArgs(1),
-	Run:   puts,
+	Use:     "puts [FILES]",
+	Short:   argpkgs.PutsDesc,
+	Aliases: argpkgs.PutsAliases,
+	Args:    cobra.MinimumNArgs(1),
+	Run:     puts,
 }
+
+// TODOOO puts should be able to throw an error without crashing
 
 func puts(cmd *cobra.Command, args []string) {
 	if dir, ok := confMap[dataDir]; ok {
 		dir += "/"
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			tics.ThrowSys(puts, err)
+		}
+
 		for _, arg := range args {
-			abs, base := checkPath(arg)
-			dest := dir + base
-			err := fsys.NvHardLink(abs, dest)
-			if err != nil {
-				fmt.Println(err)
-			}
+			putsFn.Cmd(dir, arg, homeDir, RecurseFlag)
 		}
 	}
-}
-
-func checkPath(p string) (string, string) {
-	s, err := filepath.Abs(p)
-	if err != nil {
-		return "", p
-	}
-
-	return s, filepath.Base(s)
 }
 
 func init() {
