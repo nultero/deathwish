@@ -2,6 +2,7 @@ package putsFn
 
 import (
 	"fmt"
+	"novem/cmd/fsys"
 	"os"
 	"path/filepath"
 	"strings"
@@ -17,16 +18,24 @@ const emptStr = ""
 
 func Cmd(nvDir, fpath, homeDir string, recurse bool) {
 
+	//check index first
+
 	s := tics.Make(fpath)
 	abs, isDir, err := chkPath(fpath)
 
 	if isDir && !recurse {
-		fmt.Printf("? %v: is directory, but '-r' flag is not set\n", s.Pink().String())
+		fmt.Printf(
+			"? %v: is directory, but '-r' flag is not set\n",
+			s.Pink().String(),
+		)
 		return
 	}
 
-	tr, base := pthTrail(abs, homeDir) // check index here?
-	dest := nvDir + tr + base          // TODOOOOOO write some tests & funcs to handle the permutations here
+	tr, base := fsys.Trail(abs, homeDir) // check index here?
+	tr = fsys.AppendSlash(tr)
+
+	dest := nvDir + tr + base // TODOOOOOO write some tests & funcs to handle the permutations here
+	fmt.Println(dest, "+ dest")
 
 	// err := fsys.NovemHardLink(abs, base, dir, dest)
 
@@ -36,8 +45,6 @@ func Cmd(nvDir, fpath, homeDir string, recurse bool) {
 	} else {
 		fmt.Printf("+ %v: %v\n", s.Red().String(), err)
 	}
-
-	fmt.Println(dest)
 }
 
 func chkPath(fpath string) (string, bool, error) {

@@ -20,3 +20,33 @@ func Trail(abs, home string) (string, string) {
 	}
 	return tr, base
 }
+
+// Takes a path and appends a '/' dirslash if it doesn't have one.
+func AppendSlash(fpath string) string {
+	if fpath[len(fpath)-1] != '/' {
+		fpath += "/"
+	}
+	return fpath
+}
+
+func MeshPaths(dir, base string) string {
+	c := 0
+	if dir[len(dir)-1] == '/' {
+		c++
+	}
+
+	if base[0] == '/' {
+		c++
+	}
+
+	switch c {
+	case 0:
+		dir += "/"
+	case 2:
+		for base[0] == '/' {
+			base = base[1:]
+		}
+	}
+
+	return dir + base
+}

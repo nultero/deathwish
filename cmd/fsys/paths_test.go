@@ -31,3 +31,30 @@ func TestTrail(t *testing.T) {
 		}
 	}
 }
+
+var meshSlash = []string{
+	"/home/someUser/somedir/deeperDir/",
+	"/file.ext",
+	"/home/someUser/somedir/deeperDir/file.ext",
+}
+
+var meshAbsent = []string{
+	"/home/someUser/somedir/deeperDir",
+	"file.ext",
+	"/home/someUser/somedir/deeperDir/file.ext",
+}
+
+func TestMeshPaths(t *testing.T) {
+	dir, base := meshSlash[0], meshSlash[1]
+	m := MeshPaths(dir, base)
+	if m != meshSlash[2] {
+		t.Errorf("wanted %v, got: %v", meshSlash[2], m)
+	}
+
+	dir, base = meshAbsent[0], meshAbsent[1]
+	m = MeshPaths(dir, base)
+	if m != meshAbsent[2] {
+		t.Errorf("wanted %v, got: %v", meshAbsent[2], m)
+	}
+
+}
