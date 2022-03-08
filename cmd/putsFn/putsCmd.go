@@ -2,7 +2,6 @@ package putsFn
 
 import (
 	"fmt"
-	"novem/cmd/fsys"
 	"os"
 	"path/filepath"
 	"strings"
@@ -10,64 +9,62 @@ import (
 	"github.com/nultero/tics"
 )
 
+// TODOOOO check index +
 // TODOOO update index
 // TODOOO handle directory paths
 
 const emptStr = ""
 
-func Cmd(dir, fpath, homeDir string, recurse bool) {
+func Cmd(nvDir, fpath, homeDir string, recurse bool) {
 
-	abs, base, name, blockRecur := checkPath(fpath, homeDir, recurse)
-	if blockRecur {
-		s := tics.Make(fpath).Pink().String()
-		fmt.Printf("? %v: is directory, but '-r' flag is not set\n", s)
+	s := tics.Make(fpath)
+	abs, isDir, err := chkPath(fpath)
+
+	if isDir && !recurse {
+		fmt.Printf("? %v: is directory, but '-r' flag is not set\n", s.Pink().String())
 		return
 	}
 
-	dest := dir + base + name
+	tr, base := pthTrail(abs, homeDir) // check index here?
+	dest := nvDir + tr + base          // TODOOOOOO write some tests & funcs to handle the permutations here
 
-	err := fsys.NovemHardLink(abs, base, dir, dest)
-	fpath = filepath.Base(fpath) // slightly nicer to print
+	// err := fsys.NovemHardLink(abs, base, dir, dest)
 
 	if err == nil {
-		s := tics.Make(fpath).Green().String()
-		fmt.Printf("+ %v\n", s)
+		fmt.Printf("+ %v\n", s.Green().String())
 
 	} else {
-		s := tics.Make(fpath).Red().String()
-		fmt.Printf("+ %v: %v\n", s, err)
+		fmt.Printf("+ %v: %v\n", s.Red().String(), err)
 	}
+
+	fmt.Println(dest)
 }
 
-// Unique to puts. Turn path into absolute filepath, then
-// create a base novem variant of the path (with $HOME
-//	stripped out) to hardlink.
-func checkPath(path, home string, recurse bool) (string, string, string, bool) {
-	abs, err := filepath.Abs(path)
+func chkPath(fpath string) (string, bool, error) {
+	abs, err := filepath.Abs(fpath)
 	if err != nil {
-		tics.ThrowSys(checkPath, err)
+		return emptStr, false, err
 	}
 
-	f, err := os.Open(abs)
+	fh, err := os.Open(abs)
 	if err != nil {
-		tics.ThrowSys(checkPath, err)
+		return emptStr, false, err
 	}
-	defer f.Close()
+	defer fh.Close()
 
-	st, err := f.Stat()
+	f, err := fh.Stat()
 	if err != nil {
-		tics.ThrowSys(checkPath, err)
+		return emptStr, false, err
 	}
 
-	if st.IsDir() && !recurse {
-		return emptStr, emptStr, emptStr, true
-	}
+	return abs, f.IsDir(), nil
+}
 
-	base, name := filepath.Dir(abs), filepath.Base(abs)
-	base = strings.ReplaceAll(base, home, emptStr)
-	if base[0] == '/' {
-		base = base[1:]
+func pthTrail(abs, home string) (string, string) {
+	tr, base := filepath.Dir(abs), filepath.Base(abs)
+	tr = strings.ReplaceAll(tr, home, emptStr)
+	if tr[0] == '/' {
+		tr = tr[1:]
 	}
-
-	return abs, base, name, false
+	return tr, base
 }
