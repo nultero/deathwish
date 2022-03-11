@@ -41,8 +41,7 @@ func Init(fpath string) Index {
 
 	// if the index is otherwise invalid, I do think I want a panic
 	lines := strings.Split(s, "\n")
-	idx := Index{}
-	idx.Entries = make([]Entry, len(lines))
+	idx := initEmptIdx()
 
 	for i, ln := range lines {
 		el := strings.Split(ln, charSep)
@@ -62,7 +61,7 @@ func Init(fpath string) Index {
 		}
 
 		e := Entry{
-			NovemPath:   &el[0],
+			NovemPath:   el[0],
 			Inode:       inode,
 			OutLinkPath: el[2],
 			ChangedLast: el[3],
@@ -96,5 +95,12 @@ func uninitWarn(fpath string) Index {
 	wrn := tics.Make(" ?> novem index empty / not initialized at: ").Yellow()
 	s := tics.Make(fpath).Bold()
 	fmt.Printf("%v%v\n", wrn, s)
-	return Index{}
+	return initEmptIdx()
+}
+
+func initEmptIdx() Index {
+	return Index{
+		Entries: []Entry{},
+		PathSet: map[string]int{},
+	}
 }

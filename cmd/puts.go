@@ -25,9 +25,10 @@ var putsCmd = &cobra.Command{
 
 func puts(cmd *cobra.Command, args []string) {
 
-	dir, ihndl := viper.GetString(dataDir), viper.GetString(idxFile)
-	ihndl = fsys.MeshPaths(dir, ihndl)
+	nvDir, ihndl := viper.GetString(dataDir), viper.GetString(idxFile)
+	ihndl = fsys.MeshPaths(nvDir, ihndl)
 	idx := index.Init(ihndl)
+	nvDir = fsys.AppendSlash(nvDir)
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -35,7 +36,7 @@ func puts(cmd *cobra.Command, args []string) {
 	}
 
 	for _, arg := range args {
-		put.Cmd(dir, arg, homeDir, RecurseFlag, &idx)
+		put.Cmd(nvDir, arg, homeDir, RecurseFlag, &idx)
 	}
 }
 

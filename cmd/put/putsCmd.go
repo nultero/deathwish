@@ -18,14 +18,18 @@ func Cmd(nvDir, fpath, homeDir string, recurseFlag bool, idx *index.Index) {
 	s := tics.Make(fpath)
 	abs, finfo, err := chkPath(fpath)
 
-	if idx.HasFile(abs) {
+	tr, base := fsys.Trail(abs, homeDir)
+	tr = fsys.AppendSlash(tr)
+	dest := nvDir + tr + base
+
+	if idx.HasFile(dest) {
 		hasNode, err := idx.HasInode(finfo)
 		if err != nil {
 			tics.ThrowSys(Cmd, err)
 		}
 
 		if hasNode {
-			str := tics.Make("> novem already has file: ").Yellow()
+			str := tics.Make("?> novem already has file: ").Yellow()
 			fmt.Printf("%v%v\n", str, abs)
 			return
 		} else if !hasNode {
@@ -57,16 +61,11 @@ func Cmd(nvDir, fpath, homeDir string, recurseFlag bool, idx *index.Index) {
 		return
 	}
 
-	tr, base := fsys.Trail(abs, homeDir)
-	tr = fsys.AppendSlash(tr)
-
-	dest := nvDir + tr + base
-
 	err = fsys.NovemHardLink(abs, base, nvDir, dest)
 
 	if err == nil {
 		fmt.Printf("+ %v\n", s.Green())
-		// TODOOOOOOOOO update index here
+		idx.Update(abs, dest, finfo)
 
 	} else {
 		fmt.Printf("+ %v: %v\n", s.Red(), err)
