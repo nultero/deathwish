@@ -1,11 +1,11 @@
-package putsFn
+package put
 
 import (
 	"fmt"
 	"novem/cmd/fsys"
+	"novem/cmd/index"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/nultero/tics"
 )
@@ -16,17 +16,22 @@ import (
 
 const emptStr = ""
 
-func Cmd(nvDir, fpath, homeDir string, recurse bool) {
-
-	//check index first
+func Cmd(nvDir, fpath, homeDir string, recurseFlag bool, idx *index.Index) {
 
 	s := tics.Make(fpath)
 	abs, isDir, err := chkPath(fpath)
 
-	if isDir && !recurse {
+	if idx.HasFile(abs) {
+		// want to check if the nodes match if paths match
+		// if nodes match, print "novem already has this file"
+		// if not, then explain
+	}
+	//check index first
+
+	if isDir && !recurseFlag {
 		fmt.Printf(
 			"? %v: is directory, but '-r' flag is not set\n",
-			s.Pink().String(),
+			s.Pink(),
 		)
 		return
 	}
@@ -34,16 +39,16 @@ func Cmd(nvDir, fpath, homeDir string, recurse bool) {
 	tr, base := fsys.Trail(abs, homeDir) // check index here?
 	tr = fsys.AppendSlash(tr)
 
-	dest := nvDir + tr + base // TODOOOOOO write some tests & funcs to handle the permutations here
+	dest := nvDir + tr + base // TODO flesh out the tests that handle the permutations here
 	fmt.Println(dest, "+ dest")
 
 	// err := fsys.NovemHardLink(abs, base, dir, dest)
 
 	if err == nil {
-		fmt.Printf("+ %v\n", s.Green().String())
+		fmt.Printf("+ %v\n", s.Green())
 
 	} else {
-		fmt.Printf("+ %v: %v\n", s.Red().String(), err)
+		fmt.Printf("+ %v: %v\n", s.Red(), err)
 	}
 }
 
@@ -65,13 +70,4 @@ func chkPath(fpath string) (string, bool, error) {
 	}
 
 	return abs, f.IsDir(), nil
-}
-
-func pthTrail(abs, home string) (string, string) {
-	tr, base := filepath.Dir(abs), filepath.Base(abs)
-	tr = strings.ReplaceAll(tr, home, emptStr)
-	if tr[0] == '/' {
-		tr = tr[1:]
-	}
-	return tr, base
 }

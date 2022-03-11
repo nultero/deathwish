@@ -1,10 +1,10 @@
 package index
 
-const charSep = "»"
+const charSep = "»" // literally no one will use in a path, esp. not me, nope
 
 type Entry struct {
-	NovemPath   string // the novem variant of the path given to this entry
-	Inode       int
+	NovemPath   *string
+	Inode       uint64
 	OutLinkPath string // the other link to this inode
 	ChangedLast string
 }

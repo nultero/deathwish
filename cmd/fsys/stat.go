@@ -10,7 +10,6 @@ import (
 )
 
 func StatDir(dirName string, subdir *bool) ([]string, []int) {
-
 	dir, err := ioutil.ReadDir(dirName)
 	if err != nil {
 		tics.ThrowSys(StatDir, err)

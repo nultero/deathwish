@@ -1,7 +1,6 @@
 package index
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -21,20 +20,29 @@ import (
 // across machines.
 var IdxFile = "/.novem_index"
 
-type index []Entry
+type Index struct {
+	PathSet map[string]int // these are the novem dir's paths
+	Entries []Entry
+}
 
 // Reads index into memory, allows operations on
 // idx. Hard crash if this fails; I want this to
 // be obvious when this goes wrong.
-func Init(fpath string) index {
+func Init(fpath string) Index {
 	bytes, err := os.ReadFile(fpath)
 	if err != nil {
 		tics.ThrowSys(Init, err)
 	}
-	s := string(bytes)
 
+	s := string(bytes)
+	if len(s) == 0 {
+		return uninitWarn(fpath)
+	}
+
+	// if the index is otherwise invalid, I do think I want a panic
 	lines := strings.Split(s, "\n")
-	idx := make([]Entry, len(lines))
+	idx := Index{}
+	idx.Entries = make([]Entry, len(lines))
 
 	for i, ln := range lines {
 		el := strings.Split(ln, charSep)
@@ -42,19 +50,25 @@ func Init(fpath string) index {
 			tics.ThrowSys(Init, indexErr(fpath, i))
 		}
 
-		inode, err := strconv.Atoi(el[1])
+		inode, err := strconv.ParseUint(el[1], 10, 64)
 		if err != nil {
 			tics.ThrowSys(Init, err)
 		}
 
+		if _, ok := idx.PathSet[el[0]]; ok {
+			tics.ThrowSys(Init, duplFileErr(fpath, i))
+		} else if !ok {
+			idx.PathSet[el[0]] = i
+		}
+
 		e := Entry{
-			NovemPath:   el[0],
+			NovemPath:   &el[0],
 			Inode:       inode,
 			OutLinkPath: el[2],
 			ChangedLast: el[3],
 		}
 
-		idx[i] = e
+		idx.Entries = append(idx.Entries, e)
 	}
 
 	return idx
@@ -70,14 +84,14 @@ func Init(fpath string) index {
 // 	return tics.ToJson(bytes), nil
 // }
 
-func From(fileNames []string, inodes []int) map[int]interface{} {
-	var index = map[int]interface{}{}
-	for i, node := range inodes {
-		index[node] = fileNames[i]
-	}
+// func From(fileNames []string, inodes []int) map[int]interface{} {
+// 	var index = map[int]interface{}{}
+// 	for i, node := range inodes {
+// 		index[node] = fileNames[i]
+// 	}
 
-	return index
-}
+// 	return index
+// }
 
 // func GetIndex(confMap map[string]interface{}) map[int]interface{} {
 
@@ -85,17 +99,17 @@ func From(fileNames []string, inodes []int) map[int]interface{} {
 
 // }
 
-func WriteIndex(dataDir string, idx map[int]interface{}) {
-	bytes, err := json.Marshal(idx)
-	if err != nil {
-		tics.ThrowSys(WriteIndex, err)
-	}
+// func WriteIndex(dataDir string, idx map[int]interface{}) {
+// 	bytes, err := json.Marshal(idx)
+// 	if err != nil {
+// 		tics.ThrowSys(WriteIndex, err)
+// 	}
 
-	err = os.WriteFile(dataDir+IdxFile, bytes, tics.Perm)
-	if err != nil {
-		tics.ThrowSys(WriteIndex, err)
-	}
-}
+// 	err = os.WriteFile(dataDir+IdxFile, bytes, tics.Perm)
+// 	if err != nil {
+// 		tics.ThrowSys(WriteIndex, err)
+// 	}
+// }
 
 func indexErr(idxFile string, lnNo int) error {
 	s := fmt.Sprintf(
@@ -104,4 +118,20 @@ func indexErr(idxFile string, lnNo int) error {
 	)
 
 	return errors.New(s)
+}
+
+func duplFileErr(idxFile string, lnNo int) error {
+	s := fmt.Sprintf(
+		"duplicate files in index '%v': line %v",
+		idxFile, lnNo,
+	)
+
+	return errors.New(s)
+}
+
+func uninitWarn(fpath string) Index {
+	wrn := tics.Make(" ?> novem index empty / not initialized at: ").Yellow()
+	s := tics.Make(fpath).Bold()
+	fmt.Printf("%v%v\n", wrn, s)
+	return Index{}
 }

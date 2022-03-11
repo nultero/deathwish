@@ -8,11 +8,11 @@ import (
 )
 
 var (
-	novNine    = tics.Make("\u277e").Bold().String()
+	novNine    = tics.Make("\u277e").Bold()
 	flavorText = fmt.Sprintf("%v%v%v",
-		tics.Make(" -> the ").Blue().String(),
+		tics.Make(" -> the ").Blue(),
 		novNine,
-		tics.Make(" th time I've needed this").Blue().String(),
+		tics.Make(" th time I've needed this").Blue(),
 	)
 
 	RecurseFlag bool

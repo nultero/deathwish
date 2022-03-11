@@ -1,11 +1,13 @@
 package cmd
 
 import (
-	"fmt"
 	"novem/cmd/argpkgs"
 	"novem/cmd/fsys"
 	"novem/cmd/index"
+	"novem/cmd/put"
+	"os"
 
+	"github.com/nultero/tics"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -18,29 +20,23 @@ var putsCmd = &cobra.Command{
 	Run:     puts,
 }
 
-// TODOOO puts should be able to throw an error without crashing
+// TODOOOO puts should be able to throw an error without crashing
+// [x] empty index does not crash novem, only throws warning
 
 func puts(cmd *cobra.Command, args []string) {
 
-	dir, idxHndl := viper.GetString(dataDir), viper.GetString(idxFile)
-	idxHndl = fsys.MeshPaths(dir, idxHndl)
+	dir, ihndl := viper.GetString(dataDir), viper.GetString(idxFile)
+	ihndl = fsys.MeshPaths(dir, ihndl)
+	idx := index.Init(ihndl)
 
-	idx := index.Init(idxHndl)
-	fmt.Println(idx) // TODOOOOOO pass in idx as dep inj to tests and puts.Cmd
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		tics.ThrowSys(puts, err)
+	}
 
-	// if dir, ok := confMap[dataDir]; ok {
-	// 	dir = fsys.AppendSlash(dir)
-	// 	homeDir, err := os.UserHomeDir()
-	// 	idx := index.From()
-
-	// 	if err != nil {
-	// 		tics.ThrowSys(puts, err)
-	// 	}
-
-	// 	for _, arg := range args {
-	// 		putsFn.Cmd(dir, arg, homeDir, RecurseFlag)
-	// 	}
-	// }
+	for _, arg := range args {
+		put.Cmd(dir, arg, homeDir, RecurseFlag, &idx)
+	}
 }
 
 func init() {

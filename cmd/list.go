@@ -13,6 +13,7 @@ var listCmd = &cobra.Command{
 
 // TODO docs, match list on path args
 func lsFunc(cmd *cobra.Command, args []string) {
+
 	// if path, ok := confMap[dataDir]; ok {
 
 	// 	idx, err := index.Get(path)
