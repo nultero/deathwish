@@ -3,7 +3,7 @@ package index
 import (
 	"errors"
 	"fmt"
-	"os"
+	"io/fs"
 	"syscall"
 
 	"github.com/nultero/tics"
@@ -15,15 +15,11 @@ func (idx *Index) HasFile(abs string) bool {
 }
 
 // Tries to stat the file to find an inode, and so can trip an error if the stat fails.
-func (idx *Index) HasInode(abs string) (bool, error) {
-	f, err := os.Stat(abs)
-	if err != nil {
-		return false, err
-	}
+func (idx *Index) HasInode(f fs.FileInfo) (bool, error) {
 
 	s, ok := f.Sys().(*syscall.Stat_t)
 	if !ok {
-		return false, inoErr(abs)
+		return false, inoErr(f.Name())
 	}
 
 	inode := s.Ino
