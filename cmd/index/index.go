@@ -74,43 +74,6 @@ func Init(fpath string) Index {
 	return idx
 }
 
-// func Get(dataDir string) (index, error) {
-// 	path := dataDir + IdxFile
-// 	bytes, err := os.ReadFile(path)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	return tics.ToJson(bytes), nil
-// }
-
-// func From(fileNames []string, inodes []int) map[int]interface{} {
-// 	var index = map[int]interface{}{}
-// 	for i, node := range inodes {
-// 		index[node] = fileNames[i]
-// 	}
-
-// 	return index
-// }
-
-// func GetIndex(confMap map[string]interface{}) map[int]interface{} {
-
-// 	dir, ok := confMap[]
-
-// }
-
-// func WriteIndex(dataDir string, idx map[int]interface{}) {
-// 	bytes, err := json.Marshal(idx)
-// 	if err != nil {
-// 		tics.ThrowSys(WriteIndex, err)
-// 	}
-
-// 	err = os.WriteFile(dataDir+IdxFile, bytes, tics.Perm)
-// 	if err != nil {
-// 		tics.ThrowSys(WriteIndex, err)
-// 	}
-// }
-
 func indexErr(idxFile string, lnNo int) error {
 	s := fmt.Sprintf(
 		"problem indexing file %v: line %v",

@@ -10,10 +10,6 @@ import (
 	"github.com/nultero/tics"
 )
 
-// TODOOOO check index +
-// TODOOO update index
-// TODOOO handle directory paths
-
 const emptStr = ""
 
 func Cmd(nvDir, fpath, homeDir string, recurseFlag bool, idx *index.Index) {
@@ -22,11 +18,35 @@ func Cmd(nvDir, fpath, homeDir string, recurseFlag bool, idx *index.Index) {
 	abs, isDir, err := chkPath(fpath)
 
 	if idx.HasFile(abs) {
-		// want to check if the nodes match if paths match
-		// if nodes match, print "novem already has this file"
-		// if not, then explain
+		hasNode, err := idx.HasInode(abs)
+		if err != nil {
+			tics.ThrowSys(Cmd, err)
+		}
+
+		if hasNode {
+			s := tics.Make("> novem already has file: ").Yellow()
+			fmt.Printf("%v%v\n", s, abs)
+			return
+		} else if !hasNode {
+			/*
+				A file passed in as arg
+				and a novem file have the
+				same path, but their inodes
+				do not match.
+
+				Won't try to hardlink over,
+				but print anyway.
+			*/
+
+			s := fmt.Sprintf("%v", tics.Make(abs).Yellow())
+			fmt.Println(
+				"filepath: '" + s + "' already" +
+					"in novem's index, but is not" +
+					" the same file as the argument",
+			)
+			return
+		}
 	}
-	//check index first
 
 	if isDir && !recurseFlag {
 		fmt.Printf(
@@ -36,16 +56,17 @@ func Cmd(nvDir, fpath, homeDir string, recurseFlag bool, idx *index.Index) {
 		return
 	}
 
-	tr, base := fsys.Trail(abs, homeDir) // check index here?
+	tr, base := fsys.Trail(abs, homeDir)
 	tr = fsys.AppendSlash(tr)
 
-	dest := nvDir + tr + base // TODO flesh out the tests that handle the permutations here
+	dest := nvDir + tr + base
 	fmt.Println(dest, "+ dest")
 
 	// err := fsys.NovemHardLink(abs, base, dir, dest)
 
 	if err == nil {
 		fmt.Printf("+ %v\n", s.Green())
+		// TODOOOOOOOOO update index here
 
 	} else {
 		fmt.Printf("+ %v: %v\n", s.Red(), err)
