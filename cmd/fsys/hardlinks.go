@@ -1,10 +1,12 @@
 package fsys
 
+import "os"
+
 func NovemHardLink(fileName, fileBase, novemDir, dest string) error {
-	// err := os.Link(fileName, dest)
-	// if err != nil {
-	// 	return err
-	// }
+	err := os.Link(fileName, dest)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

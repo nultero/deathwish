@@ -38,6 +38,8 @@ func puts(cmd *cobra.Command, args []string) {
 	for _, arg := range args {
 		put.Cmd(nvDir, arg, homeDir, RecurseFlag, &idx)
 	}
+
+	idx.Write(ihndl)
 }
 
 func init() {
