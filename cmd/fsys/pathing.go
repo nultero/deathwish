@@ -21,6 +21,14 @@ func Trail(abs, home string) (string, string) {
 	return tr, base
 }
 
+func subTrail(abs string) string {
+	tr := filepath.Dir(abs)
+	if tr[0] == '/' {
+		tr = tr[1:]
+	}
+	return tr
+}
+
 // Takes a path and appends a '/' dirslash if it doesn't have one.
 func AppendSlash(fpath string) string {
 	if fpath[len(fpath)-1] != '/' {

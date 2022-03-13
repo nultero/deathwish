@@ -11,15 +11,15 @@ import (
 
 func (idx *Index) Write(idxpath string) {
 
-	strs := make([]string, len(idx.Entries))
+	strs := []string{}
 	for k, i := range idx.PathSet {
 		no := fmt.Sprint(idx.Entries[i].Inode)
 		strs = append(strs, fmt.Sprintf(
-			"%v%v%v%v%v%v%v%v",
+			"%v%v%v%v%v%v%v",
 			k, charSep,
 			no, charSep,
 			idx.Entries[i].OutLinkPath, charSep,
-			idx.Entries[i].ChangedLast, charSep,
+			idx.Entries[i].ChangedLast,
 		))
 	}
 

@@ -9,6 +9,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+// TODOO make the fields $USER agnostic to distribute across my machines easier
+
 // When called with no args, novem will stat the current
 // directory for any files it is tracking and compare against
 // its index, without delving into any subdirs(at least not without `-r` flag).

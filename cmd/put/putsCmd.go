@@ -61,7 +61,7 @@ func Cmd(nvDir, fpath, homeDir string, recurseFlag bool, idx *index.Index) {
 		return
 	}
 
-	err = fsys.NovemHardLink(abs, base, nvDir, dest)
+	err = fsys.NovemHardLink(abs, nvDir, dest)
 
 	if err == nil {
 		fmt.Printf("+ %v\n", s.Green())
