@@ -12,7 +12,7 @@ import (
 func (idx *Index) Write(idxpath string) {
 
 	strs := []string{}
-	for k, i := range idx.PathSet {
+	for k, i := range idx.PathMatches {
 		no := fmt.Sprint(idx.Entries[i].Inode)
 		strs = append(strs, fmt.Sprintf(
 			"%v%v%v%v%v%v%v",

@@ -21,6 +21,8 @@ var rootCmd = &cobra.Command{
 	Run:   getAnyFromIndex,
 }
 
+// TODO quick list index from cwd if called with no arguments
+
 func getAnyFromIndex(cmd *cobra.Command, args []string) {
 	fmt.Println("yup")
 }

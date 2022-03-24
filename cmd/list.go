@@ -1,7 +1,13 @@
 package cmd
 
 import (
+	"fmt"
+	"novem/cmd/fsys"
+	"novem/cmd/index"
+
+	"github.com/nultero/tics"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var listCmd = &cobra.Command{
@@ -14,20 +20,24 @@ var listCmd = &cobra.Command{
 // TODO docs, match list on path args
 func lsFunc(cmd *cobra.Command, args []string) {
 
-	// if path, ok := confMap[dataDir]; ok {
+	if len(args) == 0 {
+		s := tics.Make(" -- ").Cyan().String()
+		fmt.Println(s + "no directories given to list")
+		return
+	}
 
-	// 	idx, err := index.Get(path)
-	// 	if err != nil {
-	// 		if os.IsNotExist(err) {
-	// 			index.WriteIndex(path, map[int]interface{}{})
+	nvDir, ihndl := viper.GetString(dataDir), viper.GetString(idxFile)
+	ihndl = fsys.MeshPaths(nvDir, ihndl)
+	idx := index.Init(ihndl)
 
-	// 		} else {
-	// 			tics.ThrowSys(lsFunc, err)
-	// 		}
-	// 	}
-
-	// 	idx.List(Verbosity)
-	// }
+	for _, arg := range args {
+		err := idx.SimpleList(arg)
+		if err != nil { // may not be fatal
+			fp := fmt.Sprintf("* problem listing:")
+			arg = tics.Make(arg).Red().String()
+			fmt.Println(fp, arg)
+		}
+	}
 }
 
 func init() {

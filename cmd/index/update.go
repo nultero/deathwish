@@ -18,5 +18,6 @@ func (idx *Index) Update(abs, nvDest string, finfo fs.FileInfo) {
 	}
 
 	idx.Entries = append(idx.Entries, e)
-	idx.PathSet[nvDest] = li
+	idx.PathMatches[nvDest] = li
+	idx.PathSet[abs] = struct{}{}
 }

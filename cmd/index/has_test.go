@@ -7,13 +7,19 @@ const (
 	someLongPath = "/home/maybeSomeUser/someotherpath/somegonkulous.txt"
 )
 
-var testPathSet = map[string]int{
+var testPathMatches = map[string]int{
 	somePath:     4,
 	someLongPath: 5,
 }
 
+var testPathSet = map[string]struct{}{
+	somePath:     {},
+	someLongPath: {},
+}
+
 var testIndex = Index{
-	PathSet: testPathSet,
+	PathMatches: testPathMatches,
+	PathSet:     testPathSet,
 }
 
 func TestHasFile(t *testing.T) {
@@ -25,3 +31,5 @@ func TestHasFile(t *testing.T) {
 		t.Errorf("wanted %v in test index, got: %v", someLongPath, testIndex.PathSet)
 	}
 }
+
+// TODOO need to test match maps

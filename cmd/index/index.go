@@ -21,8 +21,9 @@ import (
 var IdxFile = "/.novem_index"
 
 type Index struct {
-	PathSet map[string]int // these are the novem dir's paths
-	Entries []Entry
+	PathSet     map[string]struct{} // these are the non-novem links' paths
+	PathMatches map[string]int      // these are the novem dir's paths
+	Entries     []Entry
 }
 
 // Reads index into memory, allows operations on
@@ -57,7 +58,8 @@ func Init(fpath string) Index {
 		if _, ok := idx.PathSet[el[0]]; ok {
 			tics.ThrowSys(Init, duplFileErr(fpath, i))
 		} else if !ok {
-			idx.PathSet[el[0]] = i
+			idx.PathMatches[el[0]] = i
+			idx.PathSet[el[2]] = struct{}{}
 		}
 
 		e := Entry{
@@ -100,7 +102,8 @@ func uninitWarn(fpath string) Index {
 
 func initEmptIdx() Index {
 	return Index{
-		Entries: []Entry{},
-		PathSet: map[string]int{},
+		Entries:     []Entry{},
+		PathSet:     map[string]struct{}{},
+		PathMatches: map[string]int{},
 	}
 }
