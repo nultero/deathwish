@@ -20,8 +20,7 @@ var putsCmd = &cobra.Command{
 	Run:     puts,
 }
 
-// TODOOOO puts should be able to throw an error without crashing
-// [x] empty index does not crash novem, only throws warning
+// TODOOOO puts should be able to work on a directory; whether prompt or not idk
 
 func puts(cmd *cobra.Command, args []string) {
 
