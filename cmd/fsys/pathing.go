@@ -15,6 +15,11 @@ const emptStr = ""
 func Trail(abs, home string) (string, string) {
 	tr, base := filepath.Dir(abs), filepath.Base(abs)
 	tr = strings.ReplaceAll(tr, home, emptStr)
+
+	if len(tr) == 0 {
+		return tr, base
+	}
+
 	if tr[0] == '/' {
 		tr = tr[1:]
 	}
@@ -31,6 +36,11 @@ func subTrail(abs string) string {
 
 // Takes a path and appends a '/' dirslash if it doesn't have one.
 func AppendSlash(fpath string) string {
+
+	if len(fpath) == 0 {
+		return fpath
+	}
+
 	if fpath[len(fpath)-1] != '/' {
 		fpath += "/"
 	}
