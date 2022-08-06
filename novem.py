@@ -2,7 +2,7 @@
 
 from os import mkdir, getlogin
 from os.path import  realpath, expanduser as getHome
-from typing import List
+from typing import List, Set
 from sys import argv as args; args = args[1:]
 
 class uvars_t():
@@ -21,7 +21,12 @@ class fmtr():
     def yellow(s: str): return f"\x1b[33m{s}\x1b[0m"
     def red   (s: str): return f"\x1b[31m{s}\x1b[0m"
     def blue  (s: str): return f"\x1b[34m{s}\x1b[0m"
+    def purp  (s: str): return f"\x1b[95m{s}\x1b[0m"
 
+def getUncanon(fpath: str) -> str:
+    canon: str = realpath(fpath)
+    canon = canon.replace(UVARS.HOME, "~")
+    return canon
 
 class Manifest():
     def getManifest(self) -> List[str]:
@@ -46,16 +51,30 @@ class Manifest():
     def __init__(self) -> None:
         self.Lines = self.getManifest()
 
-    def WriteOut(self):
+    def GetSet(self) -> Set[str]:
         cull = set() # dedupe in case I get the same lines
         for ln in self.Lines:
             cull.add(ln) # TODO add collision logic
+        return cull
 
+    def WriteOut(self):
+        cull = self.GetSet()
         lines = [ln for ln in cull]
         lines.sort()
 
         with open(UVARS.NOV_FILE, "w") as f:
             f.write("\n".join(lines))
+
+def drop(args: List[str], man: Manifest):
+    lines = man.GetSet()
+    for arg in args:
+        arg = getUncanon(arg)
+        if arg in lines:
+            lines.discard(arg)
+            print(f"{fmtr.purp('dropped')}: {arg}")
+
+    man.Lines = [ln for ln in lines]
+    man.WriteOut()
 
 
 def ls(args: List[str], man: Manifest):
@@ -63,13 +82,13 @@ def ls(args: List[str], man: Manifest):
         for ln in man.Lines:
             print(ln)
 
+
 def put(args: List[str], man: Manifest):
     if len(args) == 0: 
         notEnoughArgs()
 
     for arg in args:
-        canon: str = realpath(arg)
-        canon = canon.replace(UVARS.HOME, "~")
+        canon = getUncanon(arg)
         man.Lines.append(canon)
     man.WriteOut()
     print(fmtr.blue("written:"), "\n".join(args))
@@ -77,7 +96,7 @@ def put(args: List[str], man: Manifest):
 
 def main():
     dispatch = {
-        "drop": 5,
+        "drop": drop,
 
         "ls"  : ls,
         "list": ls,
