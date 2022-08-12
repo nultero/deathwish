@@ -30,7 +30,7 @@ func fileExists(path string) bool {
 	return true
 }
 
-func (d Dots_t) Add(fpath, home string) error {
+func (d *Dots_t) Add(fpath, home string) error {
 	cpath, err := pathlib.GetCanon(fpath)
 	if err != nil {
 		return err
@@ -83,7 +83,5 @@ func (d Dots_t) Add(fpath, home string) error {
 
 	uc := pathlib.GetIndexFmt(cpath, home)
 	d.NewDots = append(d.NewDots, uc)
-	fmt.Println("\x1b[34m appended:\x1b[0m", uc)
-
 	return nil
 }

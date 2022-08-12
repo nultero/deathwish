@@ -8,7 +8,7 @@ import (
 
 var putCmd = &cobra.Command{
 	Use:   "add",
-	Short: "adds dotfiles to the Deathwish registry | \x1b[35mrecursive\x1b[0m by default",
+	Short: "adds dotfiles to the Deathwish registry | \x1b[34mrecursive\x1b[0m by default",
 	Aliases: []string{
 		"put",
 		"puts",
