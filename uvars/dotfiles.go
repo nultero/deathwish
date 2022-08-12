@@ -4,6 +4,7 @@ import (
 	"deathwish/pathlib"
 	"fmt"
 	"os"
+	"sort"
 )
 
 type Dots_t struct {
@@ -28,6 +29,33 @@ func fileExists(path string) bool {
 		return false
 	}
 	return true
+}
+
+func (d Dots_t) GetList() []string {
+	i := 0
+	for f := range d.Static {
+		if len(f) != 0 {
+			i++
+		}
+	}
+
+	files := make([]string, i)
+	i = 0
+	for f := range d.Static {
+		files[i] = f
+		i++
+	}
+
+	sort.Strings(files)
+	return files
+}
+
+func (d Dots_t) GetCanonList(home string) []string {
+	ls := d.GetList()
+	for i, f := range ls {
+		ls[i] = pathlib.SubCanon(f, home)
+	}
+	return ls
 }
 
 func (d *Dots_t) Add(fpath, home string) error {

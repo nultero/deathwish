@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"sort"
 
 	"github.com/spf13/cobra"
 )
@@ -19,15 +18,7 @@ func init() {
 }
 
 func list(cmd *cobra.Command, args []string) {
-	strs := make([]string, len(uvarStat.Dotfiles.Static))
-	i := 0
-	for f := range uvarStat.Dotfiles.Static {
-		strs[i] = f
-		i++
-	}
-
-	sort.Strings(strs)
-
+	strs := uvarStat.Dotfiles.GetList()
 	for _, s := range strs {
 		fmt.Println(s)
 	}
