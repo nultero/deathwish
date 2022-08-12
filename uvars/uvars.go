@@ -41,7 +41,7 @@ func InitUvars() (Uvars_t, error) {
 
 			fmt.Println(anywayWarn)
 
-			err = os.Mkdir(u.DeathwishDir, 0777)
+			err = os.Mkdir(u.DeathwishDir, 0755)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -98,7 +98,7 @@ func (u Uvars_t) meshAddedDots() {
 	dstr := strings.Join(dots, "\n")
 	bytes := []byte(dstr)
 
-	err := os.WriteFile(u.DeathwishFile, bytes, 0777)
+	err := os.WriteFile(u.DeathwishFile, bytes, 0755)
 	if err != nil {
 		fmt.Printf(
 			"%s problem writing to Deathwish index: %s\n%s",

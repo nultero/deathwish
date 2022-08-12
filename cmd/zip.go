@@ -16,7 +16,7 @@ var zipOutFile = ""
 var zipCmd = &cobra.Command{
 	Use:   "zip",
 	Short: "A brief description of your command",
-	Run:   zipdots,
+	Run:   zipMain,
 }
 
 func init() {
@@ -24,7 +24,7 @@ func init() {
 	zipCmd.Flags().StringVarP(&zipOutFile, "outfile", "o", "", "the output zip archive file")
 }
 
-func zipdots(cmd *cobra.Command, args []string) {
+func zipMain(cmd *cobra.Command, args []string) {
 	cwd, _ := os.Getwd()
 	doChecks()
 	os.Chdir(uvarStat.Home)
@@ -97,7 +97,11 @@ func doChecks() {
 }
 
 func zipAddExt() {
-	if zipOutFile[len(zipOutFile)-4:] != ".zip" {
-		zipOutFile += ".zip"
+	if len(zipOutFile) < 9 {
+		zipOutFile += ".deathzip"
+	}
+
+	if zipOutFile[len(zipOutFile)-9:] != ".deathzip" {
+		zipOutFile += ".deathzip"
 	}
 }
