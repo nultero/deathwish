@@ -14,7 +14,7 @@ var rootCmd = &cobra.Command{
 	Use:   "deathwish",
 	Short: "Some brief desc",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(uvarStat)
+		fmt.Println("I'm not sure what running this with no args does")
 	},
 }
 
